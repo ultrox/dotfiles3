@@ -1,9 +1,13 @@
 export PATH=~/.local/bin:$PATH
+export N_PREFIX="$HOME/.config/n"
+export PATH="$N_PREFIX/bin:$PATH"
+
 export FILE='ranger'
 export TERMINAL='kitty'
 export EDITOR='nvim'
 export BROWSER='google-chrome'
 export READER='zathura'
+
 export PAGER='less'
 export WM='i3'
 
