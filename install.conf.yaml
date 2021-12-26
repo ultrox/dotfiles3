@@ -19,12 +19,6 @@
     
     ~/.config/nvim/init.vim:
       path: nvim/init.vim
-    ~/.config/nvim/plugin:
-      glob: true
-      path: nvim/plugin/*
-    ~/.config/nvim/lua:
-      glob: true
-      path: nvim/lua/**
 
 - create:
     - ~/.vim/undodir
