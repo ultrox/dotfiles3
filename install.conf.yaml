@@ -11,8 +11,11 @@
 - link:
     ~/.gitignore:
     ~/.gitconfig:
+        force: true
     ~/.profile:
+        force: true
     ~/.zprofile:
+        force: true
     
     ~/.config/nvim/init.vim:
       path: nvim/init.vim
