@@ -2,7 +2,7 @@
 #
 # Define zim location
 export ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
-export ZSH=$HOME/dotfiles/zsh
+export ZSH=$DOTFILES/zsh
 
 # all of our zsh files
 typeset -U config_files
