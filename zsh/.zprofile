@@ -2,6 +2,9 @@ export PATH=~/.local/bin:$PATH
 export N_PREFIX="$HOME/.config/n"
 export PATH="$N_PREFIX/bin:$PATH"
 
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
+
 export FILE='ranger'
 export TERMINAL='kitty'
 export EDITOR='nvim'
