@@ -1,11 +1,15 @@
 export DOTFILES=$HOME/dotfiles
 
-source $DOTIFILE/zsh/private/_env
-source $DOTIFILE/zsh/private/aliases.zsh
-source $DOTIFILE/zsh/private/functions.zsh
-
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
+
+source $DOTIFILE/zsh/private/_env.zsh
+source $DOTIFILE/zsh/private/aliases.zsh
+source $DOTIFILE/zsh/private/functions.zsh
+source $DOTIFILE/zsh/private/_fzf_env.zsh
+
+
+
 
 export FILE='ranger'
 export TERMINAL='kitty'
