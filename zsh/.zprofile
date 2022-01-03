@@ -8,9 +8,6 @@ source $DOTIFILE/zsh/private/aliases.zsh
 source $DOTIFILE/zsh/private/functions.zsh
 source $DOTIFILE/zsh/private/_fzf_env.zsh
 
-
-
-
 export FILE='ranger'
 export TERMINAL='kitty'
 export EDITOR='nvim'
@@ -30,9 +27,8 @@ export GIT_EDITOR=$VIM
 # # Cleanup
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
-addToPath $MY_SCRIPTS
-addToPath $N_PREFIX/bin
-addToPath ~/.local/bin
+source $DOTIFILE/zsh/private/paths.zsh
+
 
 
 # # setxkbmap -option caps:swapescape
