@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set -e
+du -h -d1 .|sort -k1h

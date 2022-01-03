@@ -1,0 +1,7 @@
+#!/bin/bash
+sudo grep -HR '^psk=' /etc/NetworkManager/system-connections/| cut -d'/' -f5 |\
+  tr -s ' ' '_' |\
+  awk -F: '{print $1,$NF}'|\
+  sed 's/.nmconnection//' |\
+  sed 's/psk=//' |\
+  column -t

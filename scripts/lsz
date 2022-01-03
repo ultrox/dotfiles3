@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+set -e
+# all of our zsh files
+typeset -U config_files
+config_files=(./**/*.zsh)
+
+#echo $config_files | tr ' ' '\n'
+
+echo "========== Other ======="
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  echo $file
+done
+
+for file in ``
+# load the path files
+echo "========== PATH ======="
+for file in ${(M)config_files:#*/path.zsh}
+do
+  echo $file
+done
+
+echo "========== Completions ======="
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  echo $file
+done

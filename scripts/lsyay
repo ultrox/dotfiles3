@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set -e
+expac -H M "%011m\t%-20n\t%10d" $(comm -23 <(pacman -Qm | sort) <({ pacman -Qm; expac -l '\n' '%E' base; } | sort | uniq)) | sort -n

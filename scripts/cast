@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -e
+
+# start|stop screencast
+
+set -o errexit
+set -o pipefail
+
+PIDFILE="${HOME}/.screencast.pid"
+OUTFILE="/tmp/out.mkv"
+TARGET_DIR="${HOME}/Videos/ScreenCast"
+
+if [ ! -d $TARGET_DIR ]; then
+  echo 'creating... ${TARGET_DIR}'
+  mkdir -p "${TARGET_DIR}"
+fi
+
+FINALFILE="${TARGET_DIR}/screencast--$(date +'%Y-%m-%d--%H-%M-%S').mkv"
+
+# check if this script is already running
+if [ -s $PIDFILE ] && [ -d "/proc/$(cat $PIDFILE)" ]; then
+
+    # send SIG_TERM to screen recorder
+    kill $(cat $PIDFILE)
+
+    # clear the pidfile
+    rm $PIDFILE
+
+    # move the screencast into the user's video directory
+    mv $OUTFILE $FINALFILE
+else
+    # screen resolution
+    SCREENRES=$(xrandr -q --current | grep '*' | awk '{print$1}')
+
+    # write to the pidfile
+    echo $$ > $PIDFILE &&
+
+    # let the recording process take over this pid
+    exec ffmpeg \
+      -f pulse \
+      -i default \
+      -ac 2 \
+      -acodec vorbis \
+      -f x11grab \
+      -r 25 \
+      -s ${SCREENRES} \
+      -i :0.0 \
+      -vcodec libx264 ${OUTFILE}
+fi

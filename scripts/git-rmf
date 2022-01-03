@@ -1,0 +1,8 @@
+#!/bin/bash
+FILE=$1
+
+if [[ -f $FILE ]]; then
+  git filter-branch -f --index-filter "git rm -r --cached $FILE --ignore-unmatch" --prune-empty --tag-name-filter cat -- --all
+else
+  echo File required
+fi

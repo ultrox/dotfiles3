@@ -1,0 +1,12 @@
+#!/bin/bash
+_fzf_complete_tldr() {
+  _fzf_complete "--multi --reverse" "$@" < <(
+    find ~/.tldr/cache/pages/{linux,common} -type f -printf "%f\n"
+  )
+}
+
+_fzf_complete_tldr_post() {
+    sed 's/\.md//'
+}
+
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"

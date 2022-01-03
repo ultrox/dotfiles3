@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+if [[ $# -eq 0 ]]; then
+  echo 'We need a file to create'
+  exit 333
+else 
+  printf "#!/bin/bash\n\nset -e\n" > $1
+  chmod u+x $1
+fi

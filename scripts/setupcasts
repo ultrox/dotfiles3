@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+kitty @ set-font-size 20
+export PS1="\\$ "

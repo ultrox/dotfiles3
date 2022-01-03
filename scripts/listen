@@ -1,0 +1,5 @@
+#!/bin/bash
+# Show only port that are listening
+set -e
+
+netstat -lepunt|grep LISTEN --color=none

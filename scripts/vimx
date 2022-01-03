@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+FILE=$1
+echo $FILE
+
+touchx $FILE
+
+if [ -f ./$FILE ]
+then
+ vim $FILE
+else 
+  echo 'No file present'
+fi
