@@ -25,6 +25,6 @@ commitDotFiles() {
     pushd $DOTFILES
     git add .
     git commit -m "automagic messaging from me in the past."
-    git push origin master
+    git push origin main
     popd
 }
