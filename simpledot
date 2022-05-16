@@ -1,5 +1,5 @@
-# author: https://github.com/rconradharris/simpledot
 #!/usr/bin/env python3
+# author: https://github.com/rconradharris/simpledot
 # -*- coding: utf8 -*-
 from __future__ import print_function
 import argparse
