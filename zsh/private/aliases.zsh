@@ -70,3 +70,6 @@ alias ls='exa --icons --color=always --group-directories-first -s extension'
 alias last='ls -s time --long|tail -5'
 
 alias incognito='unset HISTFILE'
+alias pbcopy='xsel --clipboard --input' 
+alias pbpaste='xsel --clipboard --output'
+

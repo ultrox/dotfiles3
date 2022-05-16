@@ -1,46 +1,45 @@
-  # User configuration sourced by interactive shells
-#
-# Define zim location
-export ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
-export ZSH=$DOTFILES/zsh
+# User configuration sourced by interactive shells
+# Global: $ZSH_LOC, $HOME  (loaded from profile)
 
-# all of our zsh files
+# Start Dev stuff to be disabled later
+alias vim=nvim
+alias gs='git status'
+source ~/dotfiles/zsh/.zprofile
+# End Dev stuff to be disabled later
+
+## Most important thing to be in env: The rest are using some fn from it
+source $ZSH_LOC/private/_env_needed
+
 typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+config_files=($ZSH_LOC/**/*.zsh)
 
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}
+# load everything but _env_needed
+for file in ${config_files}
 do
   source $file
 done
 
-# Start zim - completion is init here
-[[ -s ${ZIM_HOME}/init.zsh ]] && source ${ZIM_HOME}/init.zsh
+# This is where the rest stuff goes that people typically 
+# throw in .zshrc
 
-# load everything but the path and completion files After .zim
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
+eval "`fnm env`" # added to path
+eval "$(mcfly init zsh)" 
 
-# load every completion after autocomplete loads in zim
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  source $file
-done
+
 #
 # My Overrides
 # 
 
-# Enable Ctrl-x-e to edit command line
-autoload -U edit-command-line
 
 compdef vman="man"
 
 # Emacs style
 zle -N edit-command-line
 # The same in vim (open command history to edit)
+# Opens current command in temproarly vim buffer
 bindkey '^f' edit-command-line
+# It used to be like that Ctrl-x-e to edit command line
+# autoload -U edit-command-line
 
 # there is vimrc that dose the same in vim
 bindkey '^H' backward-kill-word
@@ -50,21 +49,6 @@ bindkey -M viins '^H' backward-kill-word
 [[ -s $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 unset config_files
 
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
-
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
-
-# Put it in profile
-setopt EXTENDED_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_FIND_NO_DUPS
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_BEEP
-export HISTSIZE=12000
 
 #source /home/mavu/private/tmp/zsh-hist/zsh-hist.plugin.zsh
 

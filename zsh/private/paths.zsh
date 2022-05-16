@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-#addToPathFront $N_PREFIX/bin
+addToPath $HOME/.fnm
 addToPath $MY_SCRIPTS
-addToPath ~/.local/bin
+addToPath $HOME/local/bin
 
 addToPath $HOME/.yarn/bin
 addToPath $HOME/.cargo/bin
