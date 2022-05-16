@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-addToPathFront $N_PREFIX/bin
+#addToPathFront $N_PREFIX/bin
 addToPath $MY_SCRIPTS
 addToPath ~/.local/bin
 
