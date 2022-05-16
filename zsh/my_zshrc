@@ -1,17 +1,32 @@
 # User configuration sourced by interactive shells
-# Global: $ZSH_LOC, $HOME  (loaded from profile)
+export DOTFILES=$HOME/dotfiles
+export ZSH_LOC=$DOTFILES/zsh
 
-# Start Dev stuff to be disabled later
-alias vim=nvim
-alias gs='git status'
-source ~/dotfiles/zsh/.zprofile
-# End Dev stuff to be disabled later
+export FILE='ranger'
+export TERMINAL='kitty'
+export EDITOR='nvim'
+export BROWSER='google-chrome'
+export READER='zathura'
+export POP='hi'
 
+export PAGER='less'
+export WM='i3'
+
+# (fnm for the win)
+# export N_PREFIX="$HOME/.config/n"
+export XDG_CONFIG_HOME="$HOME"/.config
+export XDG_DATA_HOME="$HOME"/.local/share
+export XDG_CACHE_HOME="$HOME"/.cache
+export MY_SCRIPTS=$DOTFILES/scripts
+export GIT_EDITOR=$VIM
+
+# Hitory config
+export HISTSIZE=12000
 ## Most important thing to be in env: The rest are using some fn from it
-source $ZSH_LOC/private/_env_needed
+source ~/dotfiles/zsh/private/_env_needed
 
 typeset -U config_files
-config_files=($ZSH_LOC/**/*.zsh)
+config_files=(~/dotfiles/zsh/**/*.zsh)
 
 # load everything but _env_needed
 for file in ${config_files}
@@ -24,6 +39,7 @@ done
 
 eval "`fnm env`" # added to path
 eval "$(mcfly init zsh)" 
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
@@ -49,6 +65,15 @@ bindkey -M viins '^H' backward-kill-word
 # For when you need stuff you don't want public to see
 [[ -s $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 unset config_files
+
+setopt EXTENDED_HISTORY                                                       
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_BEEP
 
 
 #source /home/mavu/private/tmp/zsh-hist/zsh-hist.plugin.zsh
