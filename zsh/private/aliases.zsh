@@ -22,6 +22,8 @@ alias gcf="git commit --fixup"
 alias gri="git rebase -i"
 
 # some other alias would take presidence if not like this
+
+function glf() { git lg ${1--10} }
 alias gl=glf
 alias gla="git lg"
 alias gd='git diff ":(exclude)yarn.lock"'

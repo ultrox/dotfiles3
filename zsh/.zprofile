@@ -1,13 +1,8 @@
 export DOTFILES=$HOME/dotfiles
 export ZSH_LOC=$DOTFILES/zsh
 
-# not needed zim handles it (probably)
 #source /usr/share/fzf/completion.zsh
 #source /usr/share/fzf/key-bindings.zsh
-
-#source $DOTIFILE/zsh/private/_env.zsh
-#source $DOTIFILE/zsh/private/aliases.zsh
-#source $DOTIFILE/zsh/private/functions.zsh
 #source $DOTIFILE/zsh/private/_fzf_env.zsh
 
 export FILE='ranger'
@@ -43,9 +38,4 @@ export HISTSIZE=12000
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
 #source $DOTIFILE/zsh/private/paths.zsh
-
 # # setxkbmap -option caps:swapescape
-
-if [ -f ~/.git-completion.bash ]; then
-   . ~/.git-completion.bash
-fi

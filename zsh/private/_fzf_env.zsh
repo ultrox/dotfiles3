@@ -3,12 +3,12 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-LOC="$HOME/.tldr/cache/pages"
+LOC="$HOME/.tldr/tldr/pages"
 
 # trigger it with tldr **
 _fzf_complete_tldr() {
   _fzf_complete "--multi --reverse" "$@" < <(
-    find ~/.tldr/cache/pages/{linux,common} -type f -printf "%f\n"
+    find $LOC/{linux,common} -type f -printf "%f\n"
   )
 }
 
