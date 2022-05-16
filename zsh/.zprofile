@@ -24,7 +24,7 @@ export WM='i3'
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_DATA_HOME="$HOME"/.local/share
 export XDG_CACHE_HOME="$HOME"/.cache
-export MY_SCRIPTS=$DOTIFILES/scripts
+export MY_SCRIPTS=$DOTFILES/scripts
 export GIT_EDITOR=$VIM
 
 # Hitory config

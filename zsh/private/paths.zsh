@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 addToPath $HOME/.fnm
-addToPath $MY_SCRIPTS
+addToPathFront $MY_SCRIPTS
 addToPath $HOME/local/bin
 
 addToPath $HOME/.yarn/bin
