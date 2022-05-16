@@ -1,6 +1,7 @@
 export DOTFILES=$HOME/dotfiles
 
-source /usr/share/fzf/completion.zsh
+# not needed zim handles it (probably)
+#source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 
 source $DOTIFILE/zsh/private/_env.zsh
@@ -17,7 +18,8 @@ export READER='zathura'
 export PAGER='less'
 export WM='i3'
 
-export N_PREFIX="$HOME/.config/n"
+# (fnm for the win)
+# export N_PREFIX="$HOME/.config/n"
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_DATA_HOME="$HOME"/.local/share
 export XDG_CACHE_HOME="$HOME"/.cache
