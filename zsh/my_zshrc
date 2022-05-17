@@ -2,6 +2,10 @@
 export DOTFILES=$HOME/dotfiles
 export ZSH_LOC=$DOTFILES/zsh
 
+# Nix stuff added to config
+export NIX_PATH=$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels${NIX_PATH:+:$NIX_PATH}
+source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+
 export FILE='ranger'
 export TERMINAL='kitty'
 export EDITOR='nvim'
@@ -12,8 +16,6 @@ export POP='hi'
 export PAGER='less'
 export WM='i3'
 
-# (fnm for the win)
-# export N_PREFIX="$HOME/.config/n"
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_DATA_HOME="$HOME"/.local/share
 export XDG_CACHE_HOME="$HOME"/.cache
@@ -42,6 +44,7 @@ done
 eval "`fnm env`" # added to path
 ## Must be after .fzf to take over ctrl+r
 eval "$(mcfly init zsh)" 
+export MCFLY_FUZZY=2 # turn on fuzzy search
 
 #
 # My Overrides

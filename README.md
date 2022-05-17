@@ -16,4 +16,5 @@ https://github.com/ultrox/ansible
 ### Todo:
 
 - Figure out why .profile zprofile is not loading (export & path)
- 
+- there is no vim when run with sudo 
+
