@@ -37,11 +37,11 @@ done
 # This is where the rest stuff goes that people typically 
 # throw in .zshrc
 
-eval "`fnm env`" # added to path
-eval "$(mcfly init zsh)" 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+eval "`fnm env`" # added to path
+## Must be after .fzf to take over ctrl+r
+eval "$(mcfly init zsh)" 
 
 #
 # My Overrides
