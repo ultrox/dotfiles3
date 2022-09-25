@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# mansearch iptables <query>
+
+set -e
+LESS=+/"$2" man "$1" ;

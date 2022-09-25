@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+set -e
+# zcat $(man -w $1) | rg -i '^\.sh'
+# Line that starts with something other then a Space
+man $1 | ugrep '^\S'

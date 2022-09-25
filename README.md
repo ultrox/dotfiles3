@@ -17,4 +17,7 @@ https://github.com/ultrox/ansible
 
 - Figure out why .profile zprofile is not loading (export & path)
 - there is no vim when run with sudo 
-
+- flameshoot:
+	- set keyboard shortcut (window manager specific)
+	I use print (on backspace) to lounch `/usr/bin/flameshot gui`
+-

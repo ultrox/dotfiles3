@@ -71,7 +71,18 @@ alias cb=clipboard
 alias ls='exa --icons --color=always --group-directories-first -s extension'
 alias last='ls -s time --long|tail -5'
 
-alias incognito='unset HISTFILE'
+alias ghost='unset HISTFILE'
 alias pbcopy='xsel --clipboard --input' 
 alias pbpaste='xsel --clipboard --output'
+alias open='xdg-open'
+alias code='code-insiders'
+alias p='pnpm'
 
+alias t='tmux'
+alias ta='tmux atach'
+alias tas='tmux attach -t'
+alias tls='tmux list-sessions'
+
+alias svim='XDG_CONFIG_HOME=~/.config/svim nvim'
+
+alias packer='cd ~/.local/share/nvim/site/pack/packer/start/packer.nvim/'

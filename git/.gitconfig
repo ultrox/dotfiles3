@@ -21,8 +21,8 @@
   unstage = reset -q HEAD --
   discard = checkout --
   #gcf → git commit fixup (global alias)/
-  fixup = !sh -c 'git commit --fixup=$1'
-
+  #fixup = !sh -c 'git commit --fixup=$1'
+  todo = "commit -m 'TODO'" 
   uncommit = reset --mixed HEAD~
   undo = reset --soft HEAD~1
   amend = commit -a --amend
@@ -84,7 +84,7 @@
   lt = describe --tags --abbrev=0
 
     # show the most recently touched branches
-  recent = for-each-ref --sort='-authordate:iso8601' refs/heads/ --format="%(authordate)%09%(objectname:short)%09%1B[0;33m%(refname:short)%1B[m%09"
+  recent = "!git for-each-ref --sort='-authordate:iso8601' refs/heads/ --format='%(authordate)%09%(objectname:short)%09%1B[0;33m%(refname:short)%1B[m%09'|tac"
   latest = "!git for-each-ref --sort='-committerdate' --format='%(color:red)%(refname)%(color:reset)%09%(committerdate)' refs/remotes | sed -e 's-refs/remotes/origin/--' | less -XFR"
 
     # grep commands
@@ -154,7 +154,7 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
         editor = vim
         whitespace = cr-at-eol
-	excludesfile = /Users/marko.vujanic/.gitignore
+	excludesfile = ~/.gitignore
         attributesfile = ~/.gitattributes
 
 [pager]
@@ -190,7 +190,7 @@
 [rebase]
         instructionFormat = "[%an - %ar] %s"
 	# will sort fixup in the right place
-        autosquash = false
+        autosquash = true
 [push]
         # push will only do the current branch, not all branches
         default = current
@@ -210,3 +210,5 @@
 	process = git-lfs filter-process
 [merge]
 	conflictstyle = diff3
+[init]
+	defaultBranch = master

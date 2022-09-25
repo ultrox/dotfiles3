@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# manswitch iptables -t
+
+set -e
+man $1 | less -p "^ +$2"

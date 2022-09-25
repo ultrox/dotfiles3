@@ -1,0 +1,3065 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Fri Aug 19 11:56:59 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>UGREP</title>
+
+</head>
+<body>
+
+<h1 align="center">UGREP</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXIT STATUS">EXIT STATUS</a><br>
+<a href="#CONFIGURATION">CONFIGURATION</a><br>
+<a href="#GLOBBING">GLOBBING</a><br>
+<a href="#ENVIRONMENT">ENVIRONMENT</a><br>
+<a href="#GREP_COLORS">GREP_COLORS</a><br>
+<a href="#FORMAT">FORMAT</a><br>
+<a href="#EXAMPLES">EXAMPLES</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#LICENSE">LICENSE</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ugrep</b>,
+<b>ug</b> -- file pattern searcher</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ugrep</b>
+[<i>OPTIONS</i>] [<b>-A</b> <i>NUM</i>] [<b>-B</b>
+<i>NUM</i>] [<b>-C</b> <i>NUM</i>] [<b>-y</b>]
+[<b>-Q</b>|<i>PATTERN</i>] [<b>-f</b> <i>FILE</i>] <br>
+[<b>-e</b> <i>PATTERN</i>] [<b>-N</b> <i>PATTERN</i>]
+[<b>-t</b> <i>TYPES</i>] [<b>-g</b> <i>GLOBS</i>]
+[<b>--sort</b>[=<i>KEY</i>]] <br>
+
+[<b>--color</b>[=<i>WHEN</i>]|<b>--colour</b>[=<i>WHEN</i>]]
+[<b>--pager</b>[=<i>COMMAND</i>]] [<i>FILE ...</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>ugrep</b> utility searches any given input files,
+selecting lines that match one or more patterns. By default,
+a pattern matches an input line if the regular expression
+(RE) matches the input line. A pattern matches multiple
+input lines if the RE in the pattern matches one or more
+newlines in the input. An empty pattern matches every line.
+Each input line that matches at least one of the patterns is
+written to the standard output.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ugrep</b>
+accepts input of various encoding formats and normalizes the
+output to UTF-8. When a UTF byte order mark is present in
+the input, the input is automatically normalized; otherwise,
+<b>ugrep</b> assumes the input is ASCII, UTF-8, or raw
+binary. An input encoding format may be specified with
+option <b>--encoding</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The <b>ug</b>
+command is equivalent to <b>ugrep --config</b> to load the
+default configuration file, which allows for customization,
+see CONFIGURATION.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If no
+<i>FILE</i> arguments are specified and standard input is
+read from a terminal, recursive searches are performed as if
+<b>-R</b> is specified. To force reading from standard
+input, specify &lsquo;-&rsquo; as a <i>FILE</i>
+argument.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Directories
+specified as <i>FILE</i> arguments are searched without
+recursing into subdirectories, unless <b>-R</b>, <b>-r</b>,
+or <b>-2</b>...<b>-9</b> is specified.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Hidden files
+and directories are ignored in recursive searches. Option
+<b>-.</b> (<b>--hidden</b>) includes hidden files and
+directories in recursive searches.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A query
+interface is opened with <b>-Q</b> (<b>--query</b>) to
+interactively specify search patterns and view search
+results. Note that a <i>PATTERN</i> argument cannot be
+specified in this case. To specify one or more patterns with
+<b>-Q</b>, use <b>-e PATTERN</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Option <b>-f
+FILE</b> matches patterns specified in <b>FILE</b>. If
+<b>FILE</b> is large and defines complex regular expression
+patterns, then option <b>-P</b> (Perl matching) may improve
+performance (this omits POSIX DFA construction.)</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>ugrep
+--help</b> <i>WHAT</i> displays help on options related to
+<i>WHAT</i>; <b>--help format</b> displays help on
+<b>--format</b> and <b>--replace</b> formatting; <b>--help
+regex</b> displays help on regular expression syntax and
+conventions; <b>--help globs</b> displays help on glob
+patterns.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The following
+options are available: <b><br>
+&minus;A</b> <i>NUM</i>,
+<b>&minus;&minus;after&minus;context</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">Print NUM lines of trailing
+context after matching lines. Places a
+<b>&minus;&minus;group&minus;separator</b> between
+contiguous groups of matches. See also options
+<b>&minus;B</b>, <b>&minus;C</b> and <b>&minus;y</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;a</b>,
+<b>&minus;&minus;text</b></p>
+
+<p style="margin-left:22%;">Process a binary file as if it
+were text. This is equivalent to the
+<b>&minus;&minus;binary&minus;files</b>=text option. This
+option might output binary garbage to the terminal, which
+can have problematic consequences if the terminal driver
+interprets some of it as commands.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;and</b>
+[[<b>&minus;e</b>] PATTERN] ... <b>&minus;e</b>
+<i>PATTERN</i></p>
+
+<p style="margin-left:22%;">Specify additional patterns to
+match. Patterns must be specified with <b>&minus;e</b>. Each
+<b>&minus;e</b> <i>PATTERN</i> following this option is
+considered an alternative pattern to match, i.e. each
+<b>&minus;e</b> is interpreted as an OR pattern. For
+example, <b>&minus;e</b> <i>A</i> <b>&minus;e</b> <i>B</i>
+<b>&minus;&minus;and &minus;e</b> <i>C</i> <b>&minus;e</b>
+<i>D</i> matches lines with (&lsquo;A&rsquo; or
+&lsquo;B&rsquo;) and (&lsquo;C&rsquo; or &lsquo;D&rsquo;).
+Note that multiple <b>&minus;e</b> <i>PATTERN</i> are
+alternations that bind more tightly together than
+<b>&minus;&minus;and</b>. Option <b>&minus;&minus;stats</b>
+displays the search patterns applied. See also options
+<b>&minus;&minus;not</b>, <b>&minus;&minus;andnot</b>,
+<b>&minus;&minus;bool</b>, <b>&minus;&minus;files</b> and
+<b>&minus;&minus;lines</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;andnot</b>
+[[<b>&minus;e</b>] PATTERN] ...</p>
+
+<p style="margin-left:22%;">Combines <b>&minus;&minus;and
+&minus;&minus;not</b>. See also options
+<b>&minus;&minus;and</b>, <b>&minus;&minus;not</b> and
+<b>&minus;&minus;bool</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;B</b> <i>NUM</i>,
+<b>&minus;&minus;before&minus;context</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">Print NUM lines of leading
+context before matching lines. Places a
+<b>&minus;&minus;group&minus;separator</b> between
+contiguous groups of matches. See also options
+<b>&minus;A</b>, <b>&minus;C</b> and <b>&minus;y</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;b</b>,
+<b>&minus;&minus;byte&minus;offset</b></p>
+
+<p style="margin-left:22%;">The offset in bytes of a
+matched line is displayed in front of the respective matched
+line. If <b>&minus;u</b> is specified, displays the offset
+for each pattern matched on the same line. Byte offsets are
+exact for ASCII, UTF&minus;8 and raw binary input.
+Otherwise, the byte offset in the UTF&minus;8 normalized
+input is displayed.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;binary&minus;files</b>=<i>TYPE</i></p>
+
+<p style="margin-left:22%;">Controls searching and
+reporting pattern matches in binary files. TYPE can be
+&lsquo;binary&rsquo;, &lsquo;without&minus;match&lsquo;,
+&lsquo;text&lsquo;, &lsquo;hex&lsquo; and
+&lsquo;with&minus;hex&rsquo;. The default is
+&lsquo;binary&rsquo; to search binary files and to report a
+match without displaying the match.
+&lsquo;without&minus;match&rsquo; ignores binary matches.
+&lsquo;text&rsquo; treats all binary files as text, which
+might output binary garbage to the terminal, which can have
+problematic consequences if the terminal driver interprets
+some of it as commands. &lsquo;hex&rsquo; reports all
+matches in hexadecimal. &lsquo;with&minus;hex&rsquo; only
+reports binary matches in hexadecimal, leaving text matches
+alone. A match is considered binary when matching a zero
+byte or invalid UTF. Short options are <b>&minus;a</b>,
+<b>&minus;I</b>, <b>&minus;U</b>, <b>&minus;W</b> and
+<b>&minus;X</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;bool</b>,
+<b>&minus;%</b></p>
+
+<p style="margin-left:22%;">Specifies Boolean query
+patterns. A Boolean query pattern is composed of
+&lsquo;AND&rsquo;, &lsquo;OR&rsquo;, &lsquo;NOT&rsquo;
+operators and grouping with &lsquo;(&rsquo; &lsquo;)&rsquo;.
+Spacing between subpatterns is the same as
+&lsquo;AND&rsquo;, &lsquo;|&rsquo; is the same as
+&lsquo;OR&rsquo; and a &lsquo;&minus;&rsquo; is the same as
+&lsquo;NOT&rsquo;. The &lsquo;OR&rsquo; operator binds more
+tightly than &lsquo;AND&rsquo;. For example,
+<b>&minus;&minus;bool</b> &rsquo;A|B C|D&rsquo; matches
+lines with (&lsquo;A&rsquo; or &lsquo;B&rsquo;) and
+(&lsquo;C&rsquo; or &lsquo;D&rsquo;),
+<b>&minus;&minus;bool</b> &rsquo;A <b>&minus;B</b>&rsquo;
+matches lines with &lsquo;A&rsquo; and not &lsquo;B&rsquo;.
+Operators &lsquo;AND&rsquo;, &lsquo;OR&rsquo;,
+&lsquo;NOT&rsquo; require proper spacing. For example,
+<b>&minus;&minus;bool</b> &rsquo;A OR B AND C OR D&rsquo;
+matches lines with (&lsquo;A&rsquo; or &lsquo;B&rsquo;) and
+(&lsquo;C&rsquo; or &lsquo;D&rsquo;),
+<b>&minus;&minus;bool</b> &rsquo;A AND NOT B&rsquo; matches
+lines with &lsquo;A&rsquo; without &lsquo;B&rsquo;. Quoted
+subpatterns are matched literally as strings. For example,
+<b>&minus;&minus;bool</b> &rsquo;A
+&quot;AND&quot;|&quot;OR&quot;&rsquo; matches lines with
+&lsquo;A&rsquo; and also either &lsquo;AND&rsquo; or
+&lsquo;OR&rsquo;. Parenthesis are used for grouping. For
+example, <b>&minus;&minus;bool</b> &rsquo;(A B)|C&rsquo;
+matches lines with &lsquo;A&rsquo; and &lsquo;B&rsquo;, or
+lines with &lsquo;C&rsquo;. Note that all subpatterns in a
+Boolean query pattern are regular expressions, unless option
+<b>&minus;F</b> is used. Options <b>&minus;E</b>,
+<b>&minus;F</b>, <b>&minus;G</b>, <b>&minus;P</b> and
+<b>&minus;Z</b> can be combined with
+<b>&minus;&minus;bool</b> to match subpatterns as strings or
+regular expressions (<b>&minus;E</b> is the default.) This
+option does not apply to <b>&minus;f</b> <i>FILE</i>
+patterns. Option <b>&minus;&minus;stats</b> displays the
+search patterns applied. See also options
+<b>&minus;&minus;and</b>, <b>&minus;&minus;andnot</b>,
+<b>&minus;&minus;not</b>, <b>&minus;&minus;files</b> and
+<b>&minus;&minus;lines</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;break</b></p>
+
+<p style="margin-left:22%;">Adds a line break between
+results from different files.</p>
+
+<p style="margin-left:11%;"><b>&minus;C</b> <i>NUM</i>,
+<b>&minus;&minus;context</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">Print NUM lines of leading and
+trailing context surrounding each match. Places a
+<b>&minus;&minus;group&minus;separator</b> between
+contiguous groups of matches. See also options
+<b>&minus;A</b>, <b>&minus;B</b> and <b>&minus;y</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;c</b>,
+<b>&minus;&minus;count</b></p>
+
+<p style="margin-left:22%;">Only a count of selected lines
+is written to standard output. If <b>&minus;o</b> or
+<b>&minus;u</b> is specified, counts the number of patterns
+matched. If <b>&minus;v</b> is specified, counts the number
+of non&minus;matching lines.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;color</b>[=<i>WHEN</i>],
+<b>&minus;&minus;colour</b>[=<i>WHEN</i>]</p>
+
+<p style="margin-left:22%;">Mark up the matching text with
+the expression stored in the GREP_COLOR or GREP_COLORS
+environment variable. WHEN can be &lsquo;never&rsquo;,
+&lsquo;always&rsquo;, or &lsquo;auto&rsquo;, where
+&lsquo;auto&rsquo; marks up matches only when output on a
+terminal. The default is &lsquo;auto&rsquo;.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;colors</b>=<i>COLORS</i>,
+<b>&minus;&minus;colours</b>=<i>COLORS</i></p>
+
+<p style="margin-left:22%;">Use COLORS to mark up text.
+COLORS is a colon&minus;separated list of one or more
+parameters &lsquo;sl=&rsquo; (selected line),
+&lsquo;cx=&rsquo; (context line), &lsquo;mt=&rsquo; (matched
+text), &lsquo;ms=&rsquo; (match selected), &lsquo;mc=&rsquo;
+(match context), &lsquo;fn=&rsquo; (file name),
+&lsquo;ln=&rsquo; (line number), &lsquo;cn=&rsquo; (column
+number), &lsquo;bn=&rsquo; (byte offset), &lsquo;se=&rsquo;
+(separator). Parameter values are ANSI SGR color codes or
+&lsquo;k&rsquo; (black), &lsquo;r&rsquo; (red),
+&lsquo;g&rsquo; (green), &lsquo;y&rsquo; (yellow),
+&lsquo;b&rsquo; (blue), &lsquo;m&rsquo; (magenta),
+&lsquo;c&rsquo; (cyan), &lsquo;w&rsquo; (white). Upper case
+specifies background colors. A &lsquo;+&rsquo; qualifies a
+color as bright. A foreground and a background color may be
+combined with font properties &lsquo;n&rsquo; (normal),
+&lsquo;f&rsquo; (faint), &lsquo;h&rsquo; (highlight),
+&lsquo;i&rsquo; (invert), &lsquo;u&rsquo; (underline).
+Parameter &lsquo;hl&rsquo; enables file name hyperlinks.
+Parameter &lsquo;rv&rsquo; reverses the &lsquo;sl=&rsquo;
+and &lsquo;cx=&rsquo; parameters with option
+<b>&minus;v</b>. Selectively overrides GREP_COLORS.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;config</b>[=<i>FILE</i>],
+<b>&minus;&minus;&minus;</b>[<i>FILE</i>]</p>
+
+<p style="margin-left:22%;">Use configuration FILE. The
+default FILE is &lsquo;.ugrep&rsquo;. The working directory
+is checked first for FILE, then the home directory. The
+options specified in the configuration FILE are parsed
+first, followed by the remaining options specified on the
+command line.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;confirm</b></p>
+
+<p style="margin-left:22%;">Confirm actions in
+<b>&minus;Q</b> query mode. The default is confirm.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="7%">
+
+
+<p><b>&minus;&minus;cpp</b></p></td>
+<td width="4%"></td>
+<td width="78%">
+
+
+<p>Output file matches in C++. See also options
+<b>&minus;&minus;format</b> and <b>&minus;u</b>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="7%">
+
+
+<p><b>&minus;&minus;csv</b></p></td>
+<td width="4%"></td>
+<td width="78%">
+
+
+<p>Output file matches in CSV. If <b>&minus;H</b>,
+<b>&minus;n</b>, <b>&minus;k</b>, or <b>&minus;b</b> is
+specified, additional values are output. See also options
+<b>&minus;&minus;format</b> and <b>&minus;u</b>.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;D</b> <i>ACTION</i>,
+<b>&minus;&minus;devices</b>=<i>ACTION</i></p>
+
+<p style="margin-left:22%;">If an input file is a device,
+FIFO or socket, use ACTION to process it. By default, ACTION
+is &lsquo;skip&rsquo;, which means that devices are silently
+skipped. If ACTION is &lsquo;read&rsquo;, devices read just
+as if they were ordinary files.</p>
+
+<p style="margin-left:11%;"><b>&minus;d</b> <i>ACTION</i>,
+<b>&minus;&minus;directories</b>=<i>ACTION</i></p>
+
+<p style="margin-left:22%;">If an input file is a
+directory, use ACTION to process it. By default, ACTION is
+&lsquo;skip&rsquo;, i.e., silently skip directories unless
+specified on the command line. If ACTION is
+&lsquo;read&rsquo;, warn when directories are read as input.
+If ACTION is &lsquo;recurse&rsquo;, read all files under
+each directory, recursively, following symbolic links only
+if they are on the command line. This is equivalent to the
+<b>&minus;r</b> option. If ACTION is
+&lsquo;dereference&minus;recurse&rsquo;, read all files
+under each directory, recursively, following symbolic links.
+This is equivalent to the <b>&minus;R</b> option.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;depth</b>=[<i>MIN</i>,][<i>MAX</i>],
+<b>&minus;1</b>, <b>&minus;2</b>, <b>&minus;3</b>, ...
+<b>&minus;9</b>, <b>&minus;&minus;10</b>,
+<b>&minus;&minus;11</b>, <b>&minus;&minus;12</b>, ...</p>
+
+<p style="margin-left:22%;">Restrict recursive searches
+from MIN to MAX directory levels deep, where <b>&minus;1</b>
+(<b>&minus;&minus;depth</b>=1) searches the specified path
+without recursing into subdirectories. Note that <b>&minus;3
+&minus;5</b>, <b>&minus;3</b>&minus;5, and <b>&minus;3</b>5
+search 3 to 5 levels deep. Enables <b>&minus;R</b> if
+<b>&minus;R</b> or <b>&minus;r</b> is not specified.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;dotall</b></p>
+
+<p style="margin-left:22%;">Dot &lsquo;.&rsquo; in regular
+expressions matches anything, including newline. Note that
+&lsquo;.*&rsquo; matches all input and should not be
+used.</p>
+
+<p style="margin-left:11%;"><b>&minus;E</b>,
+<b>&minus;&minus;extended&minus;regexp</b></p>
+
+<p style="margin-left:22%;">Interpret patterns as extended
+regular expressions (EREs). This is the default.</p>
+
+<p style="margin-left:11%;"><b>&minus;e</b> <i>PATTERN</i>,
+<b>&minus;&minus;regexp</b>=<i>PATTERN</i></p>
+
+<p style="margin-left:22%;">Specify a PATTERN used during
+the search of the input: an input line is selected if it
+matches any of the specified patterns. Note that longer
+patterns take precedence over shorter patterns. This option
+is most useful when multiple <b>&minus;e</b> options are
+used to specify multiple patterns, when a pattern begins
+with a dash (&lsquo;&minus;&rsquo;), to specify a pattern
+after option <b>&minus;f</b> or after the FILE
+arguments.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;encoding</b>=<i>ENCODING</i></p>
+
+<p style="margin-left:22%;">The encoding format of the
+input. The default ENCODING is binary and UTF&minus;8 which
+are the same. Note that option <b>&minus;U</b> specifies
+binary PATTERN matching (text matching is the default.)
+ENCODING can be: &lsquo;binary&rsquo;, &lsquo;ASCII&rsquo;,
+&lsquo;UTF&minus;8&rsquo;, &lsquo;UTF&minus;16&rsquo;,
+&lsquo;UTF&minus;16BE&rsquo;, &lsquo;UTF&minus;16LE&rsquo;,
+&lsquo;UTF&minus;32&rsquo;, &lsquo;UTF&minus;32BE&rsquo;,
+&lsquo;UTF&minus;32LE&rsquo;, &lsquo;LATIN1&rsquo;,
+&lsquo;ISO&minus;8859&minus;1&rsquo;,
+&lsquo;ISO&minus;8859&minus;2&rsquo;,
+&lsquo;ISO&minus;8859&minus;3&rsquo;,
+&lsquo;ISO&minus;8859&minus;4&rsquo;,
+&lsquo;ISO&minus;8859&minus;5&rsquo;,
+&lsquo;ISO&minus;8859&minus;6&rsquo;,
+&lsquo;ISO&minus;8859&minus;7&rsquo;,
+&lsquo;ISO&minus;8859&minus;8&rsquo;,
+&lsquo;ISO&minus;8859&minus;9&rsquo;,
+&lsquo;ISO&minus;8859&minus;10&rsquo;,
+&lsquo;ISO&minus;8859&minus;11&rsquo;,
+&lsquo;ISO&minus;8859&minus;13&rsquo;,
+&lsquo;ISO&minus;8859&minus;14&rsquo;,
+&lsquo;ISO&minus;8859&minus;15&rsquo;,
+&lsquo;ISO&minus;8859&minus;16&rsquo;, &lsquo;MAC&rsquo;,
+&lsquo;MACROMAN&rsquo;, &lsquo;EBCDIC&rsquo;,
+&lsquo;CP437&rsquo;, &lsquo;CP850&rsquo;,
+&lsquo;CP858&rsquo;, &lsquo;CP1250&rsquo;,
+&lsquo;CP1251&rsquo;, &lsquo;CP1252&rsquo;,
+&lsquo;CP1253&rsquo;, &lsquo;CP1254&rsquo;,
+&lsquo;CP1255&rsquo;, &lsquo;CP1256&rsquo;,
+&lsquo;CP1257&rsquo;, &lsquo;CP1258&rsquo;,
+&lsquo;KOI8&minus;R&rsquo;, &lsquo;KOI8&minus;U&rsquo;,
+&lsquo;KOI8&minus;RU&rsquo;.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;exclude</b>=<i>GLOB</i></p>
+
+<p style="margin-left:22%;">Skip files whose name matches
+GLOB using wildcard matching, same as <b>&minus;g</b> ^GLOB.
+GLOB can use **, *, ?, and [...] as wildcards and \ to quote
+a wildcard or backslash character literally. When GLOB
+contains a &lsquo;/&rsquo;, full pathnames are matched.
+Otherwise basenames are matched. When GLOB ends with a
+&lsquo;/&rsquo;, directories are excluded as if
+<b>&minus;&minus;exclude&minus;dir</b> is specified.
+Otherwise files are excluded. Note that
+<b>&minus;&minus;exclude</b> patterns take priority over
+<b>&minus;&minus;include</b> patterns. GLOB should be quoted
+to prevent shell globbing. This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;exclude&minus;dir</b>=<i>GLOB</i></p>
+
+<p style="margin-left:22%;">Exclude directories whose name
+matches GLOB from recursive searches, same as
+<b>&minus;g</b> ^GLOB/. GLOB can use **, *, ?, and [...] as
+wildcards and \ to quote a wildcard or backslash character
+literally. When GLOB contains a &lsquo;/&rsquo;, full
+pathnames are matched. Otherwise basenames are matched. Note
+that <b>&minus;&minus;exclude&minus;dir</b> patterns take
+priority over <b>&minus;&minus;include&minus;dir</b>
+patterns. GLOB should be quoted to prevent shell globbing.
+This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;exclude&minus;from</b>=<i>FILE</i></p>
+
+<p style="margin-left:22%;">Read the globs from FILE and
+skip files and directories whose name matches one or more
+globs. A glob can use **, *, ?, and [...] as wildcards and \
+to quote a wildcard or backslash character literally. When a
+glob contains a &lsquo;/&rsquo;, full pathnames are matched.
+Otherwise basenames are matched. When a glob ends with a
+&lsquo;/&rsquo;, directories are excluded as if
+<b>&minus;&minus;exclude&minus;dir</b> is specified.
+Otherwise files are excluded. A glob starting with a
+&lsquo;!&rsquo; overrides previously&minus;specified
+exclusions by including matching files. Lines starting with
+a &lsquo;#&rsquo; and empty lines in FILE are ignored. When
+FILE is a &lsquo;&minus;&rsquo;, standard input is read.
+This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;exclude&minus;fs</b>=<i>MOUNTS</i></p>
+
+<p style="margin-left:22%;">Exclude file systems specified
+by MOUNTS from recursive searches, MOUNTS is a
+comma&minus;separated list of mount points or pathnames of
+directories on file systems. Note that
+<b>&minus;&minus;exclude&minus;fs</b> mounts take priority
+over <b>&minus;&minus;include&minus;fs</b> mounts. This
+option may be repeated.</p>
+
+<p style="margin-left:11%;"><b>&minus;F</b>,
+<b>&minus;&minus;fixed&minus;strings</b></p>
+
+<p style="margin-left:22%;">Interpret pattern as a set of
+fixed strings, separated by newlines, any of which is to be
+matched. This makes ugrep behave as fgrep. If a PATTERN is
+specified, or <b>&minus;e</b> <i>PATTERN</i> or
+<b>&minus;N</b> <i>PATTERN</i>, then this option has no
+effect on <b>&minus;f</b> <i>FILE</i> patterns to allow
+<b>&minus;f</b> <i>FILE</i> patterns to narrow or widen the
+scope of the PATTERN search.</p>
+
+<p style="margin-left:11%;"><b>&minus;f</b> <i>FILE</i>,
+<b>&minus;&minus;file</b>=<i>FILE</i></p>
+
+<p style="margin-left:22%;">Read newline&minus;separated
+patterns from FILE. White space in patterns is significant.
+Empty lines in FILE are ignored. If FILE does not exist, the
+GREP_PATH environment variable is used as path to FILE. If
+that fails, looks for FILE in
+/usr/local/share/ugrep/patterns. When FILE is a
+&lsquo;&minus;&rsquo;, standard input is read. Empty files
+contain no patterns; thus nothing is matched. This option
+may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;filter</b>=<i>COMMANDS</i></p>
+
+<p style="margin-left:22%;">Filter files through the
+specified COMMANDS first before searching. COMMANDS is a
+comma&minus;separated list of &lsquo;exts:command [option
+...]&rsquo;, where &lsquo;exts&rsquo; is a
+comma&minus;separated list of filename extensions and
+&lsquo;command&rsquo; is a filter utility. The filter
+utility should read from standard input and write to
+standard output. Files matching one of &lsquo;exts&rsquo;
+are filtered. When &lsquo;exts&rsquo; is &lsquo;*&rsquo;,
+files with non&minus;matching extensions are filtered. One
+or more &lsquo;option&rsquo; separated by spacing may be
+specified, which are passed verbatim to the command. A
+&lsquo;%&rsquo; as &lsquo;option&rsquo; expands into the
+pathname to search. For example,
+<b>&minus;&minus;filter</b>=&rsquo;pdf:pdftotext %
+&minus;&rsquo; searches PDF files. The &lsquo;%&rsquo;
+expands into a &lsquo;&minus;&rsquo; when searching standard
+input. Option <b>&minus;&minus;label</b>=.ext may be used to
+specify extension &lsquo;ext&rsquo; when searching standard
+input.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;filter&minus;magic&minus;label</b>=[+]LABEL:MAGIC</p>
+
+<p style="margin-left:22%;">Associate LABEL with files
+whose signature &quot;magic bytes&quot; match the MAGIC
+regex pattern. Only files that have no filename extension
+are labeled, unless +LABEL is specified. When LABEL matches
+an extension specified in
+<b>&minus;&minus;filter</b>=<i>COMMANDS</i>, the
+corresponding command is invoked. This option may be
+repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;format</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">Output FORMAT&minus;formatted
+matches. For example
+<b>&minus;&minus;format</b>=&rsquo;%f:%n:%O%~&rsquo; outputs
+matching lines &lsquo;%O&rsquo; with filename
+&lsquo;%f&lsquo; and line number &lsquo;%n&rsquo; followed
+by a newline &lsquo;%~&rsquo;. When option <b>&minus;P</b>
+is used, FORMAT may include &lsquo;%1&rsquo; to
+&lsquo;%9&rsquo;, &lsquo;%[<i>NUM</i>]#&rsquo; and
+&lsquo;%[<i>NAME</i>]#&rsquo; to output group captures. A
+&lsquo;%%&rsquo; outputs &lsquo;%&rsquo;. See &lsquo;ugrep
+<b>&minus;&minus;help</b> format&rsquo; and &lsquo;man
+ugrep&rsquo; section FORMAT for details. Context options
+<b>&minus;A</b>, <b>&minus;B</b>, <b>&minus;C</b> and
+<b>&minus;y</b> are ignored.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;free&minus;space</b></p>
+
+<p style="margin-left:22%;">Spacing (blanks and tabs) in
+regular expressions are ignored.</p>
+
+<p style="margin-left:11%;"><b>&minus;G</b>,
+<b>&minus;&minus;basic&minus;regexp</b></p>
+
+<p style="margin-left:22%;">Interpret patterns as basic
+regular expressions (BREs), i.e. make ugrep behave as
+traditional grep.</p>
+
+<p style="margin-left:11%;"><b>&minus;g</b> <i>GLOBS</i>,
+<b>&minus;&minus;glob</b>=<i>GLOBS</i></p>
+
+<p style="margin-left:22%;">Search only files whose name
+matches the specified comma&minus;separated list of GLOBS,
+same as <b>&minus;&minus;include</b>=&rsquo;glob&rsquo; for
+each &lsquo;glob&rsquo; in GLOBS. When a &lsquo;glob&rsquo;
+is preceded by a &lsquo;!&rsquo; or a &lsquo;^&rsquo;, skip
+files whose name matches &lsquo;glob&rsquo;, same as
+<b>&minus;&minus;exclude</b>=&rsquo;glob&rsquo;. When
+&lsquo;glob&rsquo; contains a &lsquo;/&rsquo;, full
+pathnames are matched. Otherwise basenames are matched. When
+&lsquo;glob&rsquo; ends with a &lsquo;/&rsquo;, directories
+are matched, same as
+<b>&minus;&minus;include&minus;dir</b>=&rsquo;glob&rsquo;
+and
+<b>&minus;&minus;exclude&minus;dir</b>=&rsquo;glob&rsquo;. A
+leading &lsquo;/&rsquo; matches the working directory. This
+option may be repeated and may be combined with options
+<b>&minus;M</b>, <b>&minus;O</b> and <b>&minus;t</b> to
+expand searches. See &lsquo;ugrep <b>&minus;&minus;help</b>
+globs&rsquo; and &lsquo;man ugrep&rsquo; section GLOBBING
+for details.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;group&minus;separator</b>[=<i>SEP</i>]</p>
+
+<p style="margin-left:22%;">Use SEP as a group separator
+for context options <b>&minus;A</b>, <b>&minus;B</b> and
+<b>&minus;C</b>. The default is a double hyphen
+(&lsquo;<b>&minus;&minus;</b>&rsquo;).</p>
+
+<p style="margin-left:11%;"><b>&minus;H</b>,
+<b>&minus;&minus;with&minus;filename</b></p>
+
+<p style="margin-left:22%;">Always print the filename with
+output lines. This is the default when there is more than
+one file to search.</p>
+
+<p style="margin-left:11%;"><b>&minus;h</b>,
+<b>&minus;&minus;no&minus;filename</b></p>
+
+<p style="margin-left:22%;">Never print filenames with
+output lines. This is the default when there is only one
+file (or only standard input) to search.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;heading</b>,
+<b>&minus;+</b></p>
+
+<p style="margin-left:22%;">Group matches per file. Adds a
+heading and a line break between results from different
+files.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;help</b>
+[<i>WHAT</i>], <b>&minus;?</b> [<i>WHAT</i>]</p>
+
+<p style="margin-left:22%;">Display a help message,
+specifically on WHAT when specified. In addition,
+&lsquo;<b>&minus;&minus;help</b> format&rsquo; displays an
+overview of FORMAT fields, &lsquo;<b>&minus;&minus;help</b>
+regex&rsquo; displays an overview of regular expressions and
+&lsquo;<b>&minus;&minus;help</b> globs&rsquo; displays an
+overview of glob syntax and conventions.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;hexdump</b>=[1&minus;8][a][bch][A[<i>NUM</i>]][B[<i>NUM</i>]][C[<i>NUM</i>]]</p>
+
+<p style="margin-left:22%;">Output matches in 1 to 8
+columns of 8 hexadecimal octets. The default is 2 columns or
+16 octets per line. Option &lsquo;a&rsquo; outputs a
+&lsquo;*&rsquo; for all hex lines that are identical to the
+previous hex line, &lsquo;b&rsquo; removes all space breaks,
+&lsquo;c&rsquo; removes the character column,
+&lsquo;h&rsquo; removes hex spacing, &lsquo;A&rsquo;
+includes up to NUM hex lines after the match,
+&lsquo;B&rsquo; includes up to NUM hex lines before the
+match and &lsquo;C&rsquo; includes up to NUM hex lines. When
+NUM is omitted, the matching line is included in the output.
+See also options <b>&minus;U</b>, <b>&minus;W</b> and
+<b>&minus;X</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;hidden</b>,
+<b>&minus;.</b></p>
+
+<p style="margin-left:22%;">Search hidden files and
+directories.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;hyperlink</b></p>
+
+<p style="margin-left:22%;">Hyperlinks are enabled for file
+names when colors are enabled. Same as
+<b>&minus;&minus;colors</b>=hl.</p>
+
+<p style="margin-left:11%;"><b>&minus;I</b>,
+<b>&minus;&minus;ignore&minus;binary</b></p>
+
+<p style="margin-left:22%;">Ignore matches in binary files.
+This option is equivalent to the
+<b>&minus;&minus;binary&minus;files</b>=without&minus;match
+option.</p>
+
+<p style="margin-left:11%;"><b>&minus;i</b>,
+<b>&minus;&minus;ignore&minus;case</b></p>
+
+<p style="margin-left:22%;">Perform case insensitive
+matching. By default, ugrep is case sensitive. By default,
+this option applies to ASCII letters only. Use options
+<b>&minus;P</b> and <b>&minus;i</b> for Unicode case
+insensitive matching.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;ignore&minus;files</b>[=<i>FILE</i>]</p>
+
+<p style="margin-left:22%;">Ignore files and directories
+matching the globs in each FILE that is encountered in
+recursive searches. The default FILE is
+&lsquo;.gitignore&rsquo;. Matching files and directories
+located in the directory of a FILE&rsquo;s location and in
+directories below are ignored by temporarily extending the
+<b>&minus;&minus;exclude</b> and
+<b>&minus;&minus;exclude&minus;dir</b> globs, as if
+<b>&minus;&minus;exclude&minus;from</b>=<i>FILE</i> is
+locally enforced. Globbing syntax is the same as the
+<b>&minus;&minus;exclude&minus;from</b>=<i>FILE</i>
+gitignore syntax; directories are excluded when the glob
+ends in a &lsquo;/&rsquo;, same as git. Files and
+directories explicitly specified as command line arguments
+are never ignored. This option may be repeated with
+additional files.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;include</b>=<i>GLOB</i></p>
+
+<p style="margin-left:22%;">Search only files whose name
+matches GLOB using wildcard matching, same as
+<b>&minus;g</b> <i>GLOB</i>. GLOB can use **, *, ?, and
+[...] as wildcards and \ to quote a wildcard or backslash
+character literally. When GLOB contains a &lsquo;/&rsquo;,
+full pathnames are matched. Otherwise basenames are matched.
+When GLOB ends with a &lsquo;/&rsquo;, directories are
+included as if <b>&minus;&minus;include&minus;dir</b> is
+specified. Otherwise files are included. Note that
+<b>&minus;&minus;exclude</b> patterns take priority over
+<b>&minus;&minus;include</b> patterns. GLOB should be quoted
+to prevent shell globbing. This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;include&minus;dir</b>=<i>GLOB</i></p>
+
+<p style="margin-left:22%;">Only directories whose name
+matches GLOB are included in recursive searches, same as
+<b>&minus;g</b> <i>GLOB</i>/. GLOB can use **, *, ?, and
+[...] as wildcards and \ to quote a wildcard or backslash
+character literally. When GLOB contains a &lsquo;/&rsquo;,
+full pathnames are matched. Otherwise basenames are matched.
+Note that <b>&minus;&minus;exclude&minus;dir</b> patterns
+take priority over <b>&minus;&minus;include&minus;dir</b>
+patterns. GLOB should be quoted to prevent shell globbing.
+This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;include&minus;from</b>=<i>FILE</i></p>
+
+<p style="margin-left:22%;">Read the globs from FILE and
+search only files and directories whose name matches one or
+more globs. A glob can use **, *, ?, and [...] as wildcards
+and \ to quote a wildcard or backslash character literally.
+When a glob contains a &lsquo;/&rsquo;, full pathnames are
+matched. Otherwise basenames are matched. When a glob ends
+with a &lsquo;/&rsquo;, directories are included as if
+<b>&minus;&minus;include&minus;dir</b> is specified.
+Otherwise files are included. A glob starting with a
+&lsquo;!&rsquo; overrides previously&minus;specified
+inclusions by excluding matching files. Lines starting with
+a &lsquo;#&rsquo; and empty lines in FILE are ignored. When
+FILE is a &lsquo;&minus;&rsquo;, standard input is read.
+This option may be repeated.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;include&minus;fs</b>=<i>MOUNTS</i></p>
+
+<p style="margin-left:22%;">Only file systems specified by
+MOUNTS are included in recursive searches. MOUNTS is a
+comma&minus;separated list of mount points or pathnames of
+directories on file systems.
+<b>&minus;&minus;include&minus;fs</b>=. restricts recursive
+searches to the file system of the working directory only.
+Note that <b>&minus;&minus;exclude&minus;fs</b> mounts take
+priority over <b>&minus;&minus;include&minus;fs</b> mounts.
+This option may be repeated.</p>
+
+<p style="margin-left:11%;"><b>&minus;J</b> <i>NUM</i>,
+<b>&minus;&minus;jobs</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">Specifies the number of threads
+spawned to search files. By default an optimum number of
+threads is spawned to search files simultaneously.
+<b>&minus;J</b>1 disables threading: files are searched in
+the same order as specified.</p>
+
+<p style="margin-left:11%;"><b>&minus;j</b>,
+<b>&minus;&minus;smart&minus;case</b></p>
+
+<p style="margin-left:22%;">Perform case insensitive
+matching like option <b>&minus;i</b>, unless a pattern is
+specified with a literal ASCII upper case letter.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>&minus;&minus;json</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Output file matches in JSON. If <b>&minus;H</b>,
+<b>&minus;n</b>, <b>&minus;k</b>, or <b>&minus;b</b> is
+specified, additional values are output. See also options
+<b>&minus;&minus;format</b> and <b>&minus;u</b>.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;K</b>
+[<i>MIN</i>,][<i>MAX</i>],
+<b>&minus;&minus;range</b>=[<i>MIN</i>,][<i>MAX</i>],
+<b>&minus;&minus;min&minus;line</b>=<i>MIN</i>,
+<b>&minus;&minus;max&minus;line</b>=<i>MAX</i></p>
+
+<p style="margin-left:22%;">Start searching at line MIN,
+stop at line MAX when specified.</p>
+
+<p style="margin-left:11%;"><b>&minus;k</b>,
+<b>&minus;&minus;column&minus;number</b></p>
+
+<p style="margin-left:22%;">The column number of a matched
+pattern is displayed in front of the respective matched
+line, starting at column 1. Tabs are expanded when columns
+are counted, see also option <b>&minus;&minus;tabs</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;L</b>,
+<b>&minus;&minus;files&minus;without&minus;match</b></p>
+
+<p style="margin-left:22%;">Only the names of files not
+containing selected lines are written to standard output.
+Pathnames are listed once per file searched. If the standard
+input is searched, the string &lsquo;&lsquo;(standard
+input)&rsquo;&rsquo; is written.</p>
+
+<p style="margin-left:11%;"><b>&minus;l</b>,
+<b>&minus;&minus;files&minus;with&minus;matches</b></p>
+
+<p style="margin-left:22%;">Only the names of files
+containing selected lines are written to standard output.
+ugrep will only search a file until a match has been found,
+making searches potentially less expensive. Pathnames are
+listed once per file searched. If the standard input is
+searched, the string &lsquo;&lsquo;(standard
+input)&rsquo;&rsquo; is written.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;label</b>=<i>LABEL</i></p>
+
+<p style="margin-left:22%;">Displays the LABEL value when
+input is read from standard input where a file name would
+normally be printed in the output. Associates a filename
+extension with standard input when LABEL has a suffix. The
+default value is &lsquo;(standard input)&rsquo;.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;line&minus;buffered</b></p>
+
+<p style="margin-left:22%;">Force output to be line
+buffered instead of block buffered.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;lines</b></p>
+
+<p style="margin-left:22%;">Apply Boolean queries to match
+lines, the opposite of <b>&minus;&minus;files</b>. This is
+the default Boolean query mode to match specific lines.</p>
+
+<p style="margin-left:11%;"><b>&minus;M</b> <i>MAGIC</i>,
+<b>&minus;&minus;file&minus;magic</b>=<i>MAGIC</i></p>
+
+<p style="margin-left:22%;">Only files matching the
+signature pattern MAGIC are searched. The signature
+&quot;magic bytes&quot; at the start of a file are compared
+to the MAGIC regex pattern. When matching, the file will be
+searched. When MAGIC is preceded by a &lsquo;!&rsquo; or a
+&lsquo;^&rsquo;, skip files with matching MAGIC signatures.
+This option may be repeated and may be combined with options
+<b>&minus;O</b> and <b>&minus;t</b> to expand the search.
+Every file on the search path is read, making searches
+potentially more expensive.</p>
+
+<p style="margin-left:11%;"><b>&minus;m</b>
+[<i>MIN</i>,][<i>MAX</i>],
+<b>&minus;&minus;min&minus;count</b>=<i>MIN</i>,
+<b>&minus;&minus;max&minus;count</b>=<i>MAX</i></p>
+
+<p style="margin-left:22%;">Require MIN matches, stop after
+MAX matches when specified. Output MIN to MAX matches. For
+example, <b>&minus;m</b>1 outputs the first match and
+<b>&minus;c</b>m1, (with a comma) counts non&minus;zero
+matches. See also option <b>&minus;K</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;match</b></p>
+
+<p style="margin-left:22%;">Match all input. Same as
+specifying an empty pattern to search.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;max&minus;files</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">Restrict the number of files
+matched to NUM. Note that <b>&minus;&minus;sort</b> or
+<b>&minus;J</b>1 may be specified to produce replicable
+results. If <b>&minus;&minus;sort</b> is specified, the
+number of threads spawned is limited to NUM.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;mmap</b>[=<i>MAX</i>]</p>
+
+<p style="margin-left:22%;">Use memory maps to search
+files. By default, memory maps are used under certain
+conditions to improve performance. When MAX is specified,
+use up to MAX mmap memory per thread.</p>
+
+<p style="margin-left:11%;"><b>&minus;N</b> <i>PATTERN</i>,
+<b>&minus;&minus;neg&minus;regexp</b>=<i>PATTERN</i></p>
+
+<p style="margin-left:22%;">Specify a negative PATTERN used
+during the search of the input: an input line is selected
+only if it matches any of the specified patterns unless a
+subpattern of PATTERN. Same as <b>&minus;e</b> (?^PATTERN).
+Negative pattern matches are essentially removed before any
+other patterns are matched. Note that longer patterns take
+precedence over shorter patterns. This option may be
+repeated.</p>
+
+<p style="margin-left:11%;"><b>&minus;n</b>,
+<b>&minus;&minus;line&minus;number</b></p>
+
+<p style="margin-left:22%;">Each output line is preceded by
+its relative line number in the file, starting at line 1.
+The line number counter is reset for each file
+processed.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;no&minus;group&minus;separator</b></p>
+
+<p style="margin-left:22%;">Removes the group separator
+line from the output for context options <b>&minus;A</b>,
+<b>&minus;B</b> and <b>&minus;C</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;not</b>
+[<b>&minus;e</b>] PATTERN</p>
+
+<p style="margin-left:22%;">Specifies that PATTERN should
+not match. Note that <b>&minus;e</b> <i>A</i>
+<b>&minus;&minus;not &minus;e</b> <i>B</i> matches lines
+with &lsquo;A&rsquo; or lines without a &lsquo;B&rsquo;. To
+match lines with &lsquo;A&rsquo; that have no
+&lsquo;B&rsquo;, specify <b>&minus;e</b> <i>A</i>
+<b>&minus;&minus;andnot &minus;e</b> <i>B</i>. Option
+<b>&minus;&minus;stats</b> displays the search patterns
+applied. See also options <b>&minus;&minus;and</b>,
+<b>&minus;&minus;andnot</b>, <b>&minus;&minus;bool</b>,
+<b>&minus;&minus;files</b> and
+<b>&minus;&minus;lines</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;O</b>
+<i>EXTENSIONS</i>,
+<b>&minus;&minus;file&minus;extension</b>=<i>EXTENSIONS</i></p>
+
+<p style="margin-left:22%;">Search only files whose
+filename extensions match the specified
+comma&minus;separated list of EXTENSIONS, same as
+<b>&minus;&minus;include</b>=&rsquo;*.ext&rsquo; for each
+&lsquo;ext&rsquo; in EXTENSIONS. When an &lsquo;ext&rsquo;
+is preceded by a &lsquo;!&rsquo; or a &lsquo;^&rsquo;, skip
+files whose filename extensions matches &lsquo;ext&rsquo;,
+same as <b>&minus;&minus;exclude</b>=&rsquo;*.ext&rsquo;.
+This option may be repeated and may be combined with options
+<b>&minus;g</b>, <b>&minus;M</b> and <b>&minus;t</b> to
+expand the recursive search.</p>
+
+<p style="margin-left:11%;"><b>&minus;o</b>,
+<b>&minus;&minus;only&minus;matching</b></p>
+
+<p style="margin-left:22%;">Print only the matching part of
+lines. When multiple lines match, the line numbers with
+option <b>&minus;n</b> are displayed using &lsquo;|&rsquo;
+as the field separator for each additional line matched by
+the pattern. If <b>&minus;u</b> is specified, ungroups
+multiple matches on the same line. This option cannot be
+combined with options <b>&minus;A</b>, <b>&minus;B</b>,
+<b>&minus;C</b>, <b>&minus;v</b> and <b>&minus;y</b>.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;only&minus;line&minus;number</b></p>
+
+<p style="margin-left:22%;">The line number of the matching
+line in the file is output without displaying the match. The
+line number counter is reset for each file processed.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;files</b></p>
+
+<p style="margin-left:22%;">Apply Boolean queries to match
+files, the opposite of <b>&minus;&minus;lines</b>. A file
+matches if all Boolean conditions are satisfied by the lines
+matched in the file. For example, <b>&minus;&minus;files
+&minus;e</b> <i>A</i> <b>&minus;&minus;and &minus;e</b>
+<i>B</i> <b>&minus;e</b> <i>C</i> <b>&minus;&minus;andnot
+&minus;e</b> <i>D</i> matches a file if some lines match
+&lsquo;A&rsquo; and some lines match (&lsquo;B&rsquo; or
+&lsquo;C&rsquo;) and no line in the file matches
+&lsquo;D&rsquo;. May also be specified as
+<b>&minus;&minus;files &minus;&minus;bool</b> &rsquo;A B|C
+<b>&minus;D</b>&rsquo;. Option <b>&minus;v</b> cannot be
+specified with <b>&minus;&minus;files</b>. See also options
+<b>&minus;&minus;and</b>, <b>&minus;&minus;andnot</b>,
+<b>&minus;&minus;not</b>, <b>&minus;&minus;bool</b> and
+<b>&minus;&minus;lines</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;P</b>,
+<b>&minus;&minus;perl&minus;regexp</b></p>
+
+<p style="margin-left:22%;">Interpret PATTERN as a Perl
+regular expression using PCRE2. Note that Perl pattern
+matching differs from the default grep POSIX pattern
+matching.</p>
+
+<p style="margin-left:11%;"><b>&minus;p</b>,
+<b>&minus;&minus;no&minus;dereference</b></p>
+
+<p style="margin-left:22%;">If <b>&minus;R</b> or
+<b>&minus;r</b> is specified, no symbolic links are
+followed, even when they are specified on the command
+line.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;pager</b>[=<i>COMMAND</i>]</p>
+
+<p style="margin-left:22%;">When output is sent to the
+terminal, uses COMMAND to page through the output. The
+default COMMAND is &lsquo;less <b>&minus;R</b>&rsquo;.
+Enables <b>&minus;&minus;heading</b> and
+<b>&minus;&minus;line&minus;buffered</b>.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;pretty</b></p>
+
+<p style="margin-left:22%;">When output is sent to a
+terminal, enables <b>&minus;&minus;color</b>,
+<b>&minus;&minus;heading</b>, <b>&minus;n</b>,
+<b>&minus;&minus;sort</b> and <b>&minus;T</b> when not
+explicitly disabled or set.</p>
+
+<p style="margin-left:11%;"><b>&minus;Q</b>[<i>DELAY</i>],
+<b>&minus;&minus;query</b>[=<i>DELAY</i>]</p>
+
+<p style="margin-left:22%;">Query mode: user interface to
+perform interactive searches. This mode requires an ANSI
+capable terminal. An optional DELAY argument may be
+specified to reduce or increase the response time to execute
+searches after the last key press, in increments of 100ms,
+where the default is 5 (0.5s delay). No whitespace may be
+given between <b>&minus;Q</b> and its argument DELAY.
+Initial patterns may be specified with <b>&minus;e</b>
+<i>PATTERN</i>, i.e. a PATTERN argument requires option
+<b>&minus;e</b>. Press F1 or CTRL&minus;Z to view the help
+screen. Press F2 or CTRL&minus;Y to invoke a command to view
+or edit the file shown at the top of the screen. The command
+can be specified with option <b>&minus;&minus;view</b>, or
+defaults to environment variable PAGER if defined, or
+EDITOR. Press Tab and Shift&minus;Tab to navigate
+directories and to select a file to search. Press Enter to
+select lines to output. Press ALT&minus;l for option
+<b>&minus;l</b> to list files, ALT&minus;n for
+<b>&minus;n</b>, etc. Non&minus;option commands include
+ALT&minus;] to increase fuzziness and ALT&minus;} to
+increase context. Enables <b>&minus;&minus;heading</b>. See
+also options <b>&minus;&minus;confirm</b> and
+<b>&minus;&minus;view</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;q</b>,
+<b>&minus;&minus;quiet</b>, <b>&minus;&minus;silent</b></p>
+
+<p style="margin-left:22%;">Quiet mode: suppress all
+output. ugrep will only search until a match has been
+found.</p>
+
+<p style="margin-left:11%;"><b>&minus;R</b>,
+<b>&minus;&minus;dereference&minus;recursive</b></p>
+
+<p style="margin-left:22%;">Recursively read all files
+under each directory. Follow all symbolic links, unlike
+<b>&minus;r</b>. Note that when no FILE arguments are
+specified and input is read from a terminal, recursive
+searches are performed as if <b>&minus;R</b> is specified.
+See also option <b>&minus;&minus;sort</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;r</b>,
+<b>&minus;&minus;recursive</b></p>
+
+<p style="margin-left:22%;">Recursively read all files
+under each directory, following symbolic links only if they
+are specified on the command line. See also option
+<b>&minus;&minus;sort</b>.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;replace</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">Replace matching patterns in
+the output by the specified FORMAT with &lsquo;%&rsquo;
+fields. When option <b>&minus;P</b> is used, FORMAT may
+include &lsquo;%1&rsquo; to &lsquo;%9&rsquo;,
+&lsquo;%[<i>NUM</i>]#&rsquo; and
+&lsquo;%[<i>NAME</i>]#&rsquo; to output group captures. A
+&lsquo;%%&rsquo; outputs &lsquo;%&rsquo; and
+&lsquo;%~&rsquo; outputs a newline. See option
+<b>&minus;&minus;format</b>, &lsquo;ugrep
+<b>&minus;&minus;help</b> format&rsquo; and &lsquo;man
+ugrep&rsquo; section FORMAT for details.</p>
+
+<p style="margin-left:11%;"><b>&minus;S</b>,
+<b>&minus;&minus;dereference</b></p>
+
+<p style="margin-left:22%;">If <b>&minus;r</b> is
+specified, all symbolic links are followed, like
+<b>&minus;R</b>. The default is not to follow symbolic
+links.</p>
+
+<p style="margin-left:11%;"><b>&minus;s</b>,
+<b>&minus;&minus;no&minus;messages</b></p>
+
+<p style="margin-left:22%;">Silent mode: nonexistent and
+unreadable files are ignored, i.e. their error messages and
+warnings are suppressed.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;save&minus;config</b>[=<i>FILE</i>]</p>
+
+<p style="margin-left:22%;">Save configuration FILE. By
+default &lsquo;.ugrep&rsquo; is saved. If FILE is a
+&lsquo;&minus;&rsquo;, write the configuration to standard
+output.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;separator</b>[=<i>SEP</i>]</p>
+
+<p style="margin-left:22%;">Use SEP as field separator
+between file name, line number, column number, byte offset
+and the matched line. The default is a colon
+(&lsquo;:&rsquo;).</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;sort</b>[=<i>KEY</i>]</p>
+
+<p style="margin-left:22%;">Displays matching files in the
+order specified by KEY in recursive searches. KEY can be
+&lsquo;name&rsquo; to sort by pathname (default),
+&lsquo;best&rsquo; to sort by best match with option
+<b>&minus;Z</b> (sort by best match requires two passes over
+the input files), &lsquo;size&rsquo; to sort by file size,
+&lsquo;used&rsquo; to sort by last access time,
+&lsquo;changed&rsquo; to sort by last modification time and
+&lsquo;created&rsquo; to sort by creation time. Sorting is
+reversed with &lsquo;rname&rsquo;, &lsquo;rbest&rsquo;,
+&lsquo;rsize&rsquo;, &lsquo;rused&rsquo;,
+&lsquo;rchanged&rsquo;, or &lsquo;rcreated&rsquo;. Archive
+contents are not sorted. Subdirectories are sorted and
+displayed after matching files. FILE arguments are searched
+in the same order as specified. Normally ugrep displays
+matches in no particular order to improve performance.</p>
+
+<p style="margin-left:11%;"><b>&minus;&minus;stats</b></p>
+
+<p style="margin-left:22%;">Output statistics on the number
+of files and directories searched and the inclusion and
+exclusion constraints applied.</p>
+
+<p style="margin-left:11%;"><b>&minus;T</b>,
+<b>&minus;&minus;initial&minus;tab</b></p>
+
+<p style="margin-left:22%;">Add a tab space to separate the
+file name, line number, column number and byte offset with
+the matched line.</p>
+
+<p style="margin-left:11%;"><b>&minus;t</b> <i>TYPES</i>,
+<b>&minus;&minus;file&minus;type</b>=<i>TYPES</i></p>
+
+<p style="margin-left:22%;">Search only files associated
+with TYPES, a comma&minus;separated list of file types. Each
+file type corresponds to a set of filename extensions passed
+to option <b>&minus;O</b> and filenames passed to option
+<b>&minus;g</b>. For capitalized file types, the search is
+expanded to include files with matching file signature magic
+bytes, as if passed to option <b>&minus;M</b>. When a type
+is preceded by a &lsquo;!&rsquo; or a &lsquo;^&rsquo;,
+excludes files of the specified type. This option may be
+repeated. The possible file types can be (where
+<b>&minus;t</b>list displays a detailed list):
+&lsquo;actionscript&rsquo;, &lsquo;ada&rsquo;,
+&lsquo;asm&rsquo;, &lsquo;asp&rsquo;, &lsquo;aspx&rsquo;,
+&lsquo;autoconf&rsquo;, &lsquo;automake&rsquo;,
+&lsquo;awk&rsquo;, &lsquo;Awk&rsquo;, &lsquo;basic&rsquo;,
+&lsquo;batch&rsquo;, &lsquo;bison&rsquo;, &lsquo;c&rsquo;,
+&lsquo;c++&rsquo;, &lsquo;clojure&rsquo;, &lsquo;cpp&rsquo;,
+&lsquo;csharp&rsquo;, &lsquo;css&rsquo;, &lsquo;csv&rsquo;,
+&lsquo;dart&rsquo;, &lsquo;Dart&rsquo;,
+&lsquo;delphi&rsquo;, &lsquo;elisp&rsquo;,
+&lsquo;elixir&rsquo;, &lsquo;erlang&rsquo;,
+&lsquo;fortran&rsquo;, &lsquo;gif&rsquo;, &lsquo;Gif&rsquo;,
+&lsquo;go&rsquo;, &lsquo;groovy&rsquo;, &lsquo;gsp&rsquo;,
+&lsquo;haskell&rsquo;, &lsquo;html&rsquo;,
+&lsquo;jade&rsquo;, &lsquo;java&rsquo;, &lsquo;jpeg&rsquo;,
+&lsquo;Jpeg&rsquo;, &lsquo;js&rsquo;, &lsquo;json&rsquo;,
+&lsquo;jsp&rsquo;, &lsquo;julia&rsquo;,
+&lsquo;kotlin&rsquo;, &lsquo;less&rsquo;, &lsquo;lex&rsquo;,
+&lsquo;lisp&rsquo;, &lsquo;lua&rsquo;, &lsquo;m4&rsquo;,
+&lsquo;make&rsquo;, &lsquo;markdown&rsquo;,
+&lsquo;matlab&rsquo;, &lsquo;node&rsquo;,
+&lsquo;Node&rsquo;, &lsquo;objc&rsquo;,
+&lsquo;objc++&rsquo;, &lsquo;ocaml&rsquo;,
+&lsquo;parrot&rsquo;, &lsquo;pascal&rsquo;,
+&lsquo;pdf&rsquo;, &lsquo;Pdf&rsquo;, &lsquo;perl&rsquo;,
+&lsquo;Perl&rsquo;, &lsquo;php&rsquo;, &lsquo;Php&rsquo;,
+&lsquo;png&rsquo;, &lsquo;Png&rsquo;, &lsquo;prolog&rsquo;,
+&lsquo;python&rsquo;, &lsquo;Python&rsquo;, &lsquo;r&rsquo;,
+&lsquo;rpm&rsquo;, &lsquo;Rpm&rsquo;, &lsquo;rst&rsquo;,
+&lsquo;rtf&rsquo;, &lsquo;Rtf&rsquo;, &lsquo;ruby&rsquo;,
+&lsquo;Ruby&rsquo;, &lsquo;rust&rsquo;, &lsquo;scala&rsquo;,
+&lsquo;scheme&rsquo;, &lsquo;shell&rsquo;,
+&lsquo;Shell&rsquo;, &lsquo;smalltalk&rsquo;,
+&lsquo;sql&rsquo;, &lsquo;svg&rsquo;, &lsquo;swift&rsquo;,
+&lsquo;tcl&rsquo;, &lsquo;tex&rsquo;, &lsquo;text&rsquo;,
+&lsquo;tiff&rsquo;, &lsquo;Tiff&rsquo;, &lsquo;tt&rsquo;,
+&lsquo;typescript&rsquo;, &lsquo;verilog&rsquo;,
+&lsquo;vhdl&rsquo;, &lsquo;vim&rsquo;, &lsquo;xml&rsquo;,
+&lsquo;Xml&rsquo;, &lsquo;yacc&rsquo;,
+&lsquo;yaml&rsquo;.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;tabs</b>[=<i>NUM</i>]</p>
+
+<p style="margin-left:22%;">Set the tab size to NUM to
+expand tabs for option <b>&minus;k</b>. The value of NUM may
+be 1, 2, 4, or 8. The default tab size is 8.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;tag</b>[=<i>TAG</i>[,<i>END</i>]]</p>
+
+<p style="margin-left:22%;">Disables colors to mark up
+matches with TAG. END marks the end of a match if specified,
+otherwise TAG. The default is &lsquo;___&rsquo;.</p>
+
+<p style="margin-left:11%;"><b>&minus;U</b>,
+<b>&minus;&minus;binary</b></p>
+
+<p style="margin-left:22%;">Disables Unicode matching for
+binary file matching, forcing PATTERN to match bytes, not
+Unicode characters. For example, <b>&minus;U</b>
+&rsquo;\xa3&rsquo; matches byte A3 (hex) instead of the
+Unicode code point U+00A3 represented by the UTF&minus;8
+sequence C2 A3. See also option
+<b>&minus;&minus;dotall</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;u</b>,
+<b>&minus;&minus;ungroup</b></p>
+
+<p style="margin-left:22%;">Do not group multiple pattern
+matches on the same matched line. Output the matched line
+again for each additional pattern match, using
+&lsquo;+&rsquo; as a separator.</p>
+
+<p style="margin-left:11%;"><b>&minus;V</b>,
+<b>&minus;&minus;version</b></p>
+
+<p style="margin-left:22%;">Display version with linked
+libraries and exit.</p>
+
+<p style="margin-left:11%;"><b>&minus;v</b>,
+<b>&minus;&minus;invert&minus;match</b></p>
+
+<p style="margin-left:22%;">Selected lines are those not
+matching any of the specified patterns.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;view</b>[=<i>COMMAND</i>]</p>
+
+<p style="margin-left:22%;">Use COMMAND to view/edit a file
+in query mode when pressing CTRL&minus;Y.</p>
+
+<p style="margin-left:11%;"><b>&minus;W</b>,
+<b>&minus;&minus;with&minus;hex</b></p>
+
+<p style="margin-left:22%;">Output binary matches in
+hexadecimal, leaving text matches alone. This option is
+equivalent to the
+<b>&minus;&minus;binary&minus;files</b>=with&minus;hex
+option with <b>&minus;&minus;hexdump</b>=2C. To omit the
+matching line from the hex output, combine option
+<b>&minus;&minus;hexdump</b> with option <b>&minus;W</b>.
+See also option <b>&minus;U</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;w</b>,
+<b>&minus;&minus;word&minus;regexp</b></p>
+
+<p style="margin-left:22%;">The PATTERN is searched for as
+a word, such that the matching text is preceded by a
+non&minus;word character and is followed by a non&minus;word
+character. Word characters are letters, digits and the
+underscore. With option <b>&minus;P</b>, word characters are
+Unicode letters, digits and underscore. This option has no
+effect if <b>&minus;x</b> is also specified. If a PATTERN is
+specified, or <b>&minus;e</b> <i>PATTERN</i> or
+<b>&minus;N</b> <i>PATTERN</i>, then this option has no
+effect on <b>&minus;f</b> <i>FILE</i> patterns to allow
+<b>&minus;f</b> <i>FILE</i> patterns to narrow or widen the
+scope of the PATTERN search.</p>
+
+<p style="margin-left:11%;"><b>&minus;X</b>,
+<b>&minus;&minus;hex</b></p>
+
+<p style="margin-left:22%;">Output matches in hexadecimal.
+This option is equivalent to the
+<b>&minus;&minus;binary&minus;files</b>=hex option with
+<b>&minus;&minus;hexdump</b>=2C. To omit the matching line
+from the hex output, use option <b>&minus;&minus;hexdump</b>
+instead of <b>&minus;X</b>. See also option
+<b>&minus;U</b>.</p>
+
+<p style="margin-left:11%;"><b>&minus;x</b>,
+<b>&minus;&minus;line&minus;regexp</b></p>
+
+<p style="margin-left:22%;">Select only those matches that
+exactly match the whole line, as if the patterns are
+surrounded by ^ and $. If a PATTERN is specified, or
+<b>&minus;e</b> <i>PATTERN</i> or <b>&minus;N</b>
+<i>PATTERN</i>, then this option has no effect on
+<b>&minus;f</b> <i>FILE</i> patterns to allow
+<b>&minus;f</b> <i>FILE</i> patterns to narrow or widen the
+scope of the PATTERN search.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="7%">
+
+
+<p><b>&minus;&minus;xml</b></p></td>
+<td width="4%"></td>
+<td width="78%">
+
+
+<p>Output file matches in XML. If <b>&minus;H</b>,
+<b>&minus;n</b>, <b>&minus;k</b>, or <b>&minus;b</b> is
+specified, additional values are output. See also options
+<b>&minus;&minus;format</b> and <b>&minus;u</b>.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>&minus;Y</b>,
+<b>&minus;&minus;empty</b></p>
+
+<p style="margin-left:22%;">Permits empty matches. By
+default, empty matches are disabled, unless a pattern begins
+with &lsquo;^&rsquo; or ends with &lsquo;$&rsquo;. With this
+option, empty&minus;matching patterns such as x? and x*,
+match all input, not only lines containing the character
+&lsquo;x&rsquo;.</p>
+
+<p style="margin-left:11%;"><b>&minus;y</b>,
+<b>&minus;&minus;any&minus;line</b>,
+<b>&minus;&minus;passthru</b></p>
+
+<p style="margin-left:22%;">Any line is output (passthru).
+Non&minus;matching lines are output as context with a
+&lsquo;&minus;&rsquo; separator. See also options
+<b>&minus;A</b>, <b>&minus;B</b> and <b>&minus;C</b>.</p>
+
+
+<p style="margin-left:11%;"><b>&minus;Z</b>[+&minus;~][<i>MAX</i>],
+<b>&minus;&minus;fuzzy</b>=[+&minus;~][<i>MAX</i>]</p>
+
+<p style="margin-left:22%;">Fuzzy mode: report approximate
+pattern matches within MAX errors. The default is
+<b>&minus;Z</b>1: one deletion, insertion or substitution is
+allowed. If &lsquo;+&lsquo;, &lsquo;&minus;&rsquo; and/or
+&lsquo;~&rsquo; is specified, then &lsquo;+&rsquo; allows
+insertions, &lsquo;&minus;&rsquo; allows deletions and
+&lsquo;~&rsquo; allows substitutions. For example,
+<b>&minus;Z</b>+~3 allows up to three insertions or
+substitutions, but no deletions. The first character of an
+approximate match always matches the start of a pattern.
+Option <b>&minus;&minus;sort</b>=best orders matching files
+by best match. No whitespace may be given between
+<b>&minus;Z</b> and its argument.</p>
+
+<p style="margin-left:11%;"><b>&minus;z</b>,
+<b>&minus;&minus;decompress</b></p>
+
+<p style="margin-left:22%;">Decompress files to search,
+when compressed. Archives (.cpio, .pax, .tar and .zip) and
+compressed archives (e.g. .taz, .tgz, .tpz, .tbz, .tbz2,
+.tb2, .tz2, .tlz, .txz, .tzst) are searched and matching
+pathnames of files in archives are output in braces. If
+<b>&minus;g</b>, <b>&minus;O</b>, <b>&minus;M</b>, or
+<b>&minus;t</b> is specified, searches files stored in
+archives whose filenames match globs, match filename
+extensions, match file signature magic bytes, or match file
+types, respectively. Supported compression formats: gzip
+(.gz), compress (.Z), zip, bzip2 (requires suffix .bz, .bz2,
+.bzip2, .tbz, .tbz2, .tb2, .tz2), lzma and xz (requires
+suffix .lzma, .tlz, .xz, .txz), lz4 (requires suffix .lz4),
+zstd (requires suffix .zst, .zstd, .tzst).</p>
+
+
+<p style="margin-left:11%;"><b>&minus;&minus;zmax</b>=<i>NUM</i></p>
+
+<p style="margin-left:22%;">When used with option
+<b>&minus;z</b> (<b>&minus;&minus;decompress</b>), searches
+the contents of compressed files and archives stored within
+archives by up to NUM recursive expansions. The default
+<b>&minus;&minus;zmax</b>=1 only permits searching
+uncompressed files stored in cpio, pax, tar and zip
+archives; compressed files and archives are detected as
+binary files and are effectively ignored. Specify
+<b>&minus;&minus;zmax</b>=2 to search compressed files and
+archives stored in cpio, pax, tar and zip archives. NUM may
+range from 1 to 99 for up to 99 decompression and
+de&minus;archiving steps. Increasing NUM values gradually
+degrades performance.</p>
+
+<p style="margin-left:11%;"><b>&minus;0</b>,
+<b>&minus;&minus;null</b></p>
+
+<p style="margin-left:22%;">Prints a zero&minus;byte (NUL)
+after the file name. This option can be used with commands
+such as &lsquo;find <b>&minus;p</b>rint0&rsquo; and
+&lsquo;xargs <b>&minus;0</b>&rsquo; to process arbitrary
+file names.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A
+&lsquo;--&rsquo; signals the end of options; the rest of the
+parameters are <i>FILE</i> arguments, allowing filenames to
+begin with a &lsquo;-&rsquo; character.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Long options
+may start with &lsquo;--no-&rsquo; to disable, when
+applicable.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The regular
+expression pattern syntax is an extended form of the POSIX
+ERE syntax. For an overview of the syntax see README.md or
+visit:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">https://github.com/Genivia/ugrep</p>
+
+<p style="margin-left:11%; margin-top: 1em">Note that
+&lsquo;.&rsquo; matches any non-newline character. Pattern
+&lsquo;\n&rsquo; matches a newline character. Multiple lines
+may be matched with patterns that match one or more newline
+characters.</p>
+
+<h2>EXIT STATUS
+<a name="EXIT STATUS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>ugrep</b> utility exits with one of the following
+values:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p>0</p></td>
+<td width="8%"></td>
+<td width="49%">
+
+
+<p>One or more lines were selected.</p></td>
+<td width="29%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p>1</p></td>
+<td width="8%"></td>
+<td width="49%">
+
+
+<p>No lines were selected.</p></td>
+<td width="29%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p>&gt;1</p></td>
+<td width="8%"></td>
+<td width="49%">
+
+
+<p>An error occurred.</p></td>
+<td width="29%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">If <b>-q</b> or
+<b>--quiet</b> or <b>--silent</b> is used and a line is
+selected, the exit status is 0 even if an error
+occurred.</p>
+
+<h2>CONFIGURATION
+<a name="CONFIGURATION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The <b>ug</b>
+command is intended for context-dependent interactive
+searching and is equivalent to the <b>ugrep --config</b>
+command to load the default configuration file
+&lsquo;.ugrep&rsquo; when present in the working directory
+or in the home directory.</p>
+
+<p style="margin-left:11%; margin-top: 1em">A configuration
+file contains &lsquo;NAME=VALUE&rsquo; pairs per line, where
+&lsquo;NAME&lsquo; is the name of a long option (without
+&lsquo;--&rsquo;) and &lsquo;=VALUE&rsquo; is an argument,
+which is optional and may be omitted depending on the
+option. Empty lines and lines starting with a
+&lsquo;#&rsquo; are ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>--config</b>=<i>FILE</i> option and its abbreviated form
+<b>---</b><i>FILE</i> load the specified configuration file
+located in the working directory or, when not found, located
+in the home directory. An error is produced when <i>FILE</i>
+is not found or cannot be read.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Command line
+options are parsed in the following order: the configuration
+file is loaded first, followed by the remaining options and
+arguments on the command line.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>--save-config</b> option saves a &lsquo;.ugrep&rsquo;
+configuration file to the working directory with a subset of
+the current options. The <b>--save-config</b>=<i>FILE</i>
+option saves the configuration to <i>FILE</i>. The
+configuration is written to standard output when <i>FILE</i>
+is a &lsquo;-&rsquo;.</p>
+
+<h2>GLOBBING
+<a name="GLOBBING"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Globbing is
+used by options <b>-g</b>, <b>--include</b>,
+<b>--include-dir</b>, <b>--include-from</b>,
+<b>--exclude</b>, <b>--exclude-dir</b>,
+<b>--exclude-from</b> and <b>--ignore-files</b> to match
+pathnames and basenames in recursive searches. Glob
+arguments for these options should be quoted to prevent
+shell globbing.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Globbing
+supports gitignore syntax and the corresponding matching
+rules, except that a glob normally matches files but not
+directories. If a glob ends in a path separator
+&lsquo;/&rsquo;, then it matches directories but not files,
+as if <b>--include-dir</b> or <b>--exclude-dir</b> is
+specified. When a glob contains a path separator
+&lsquo;/&rsquo;, the full pathname is matched. Otherwise the
+basename of a file or directory is matched. For example,
+<b>*.h</b> matches foo.h and bar/foo.h. <b>bar/*.h</b>
+matches bar/foo.h but not foo.h and not bar/bar/foo.h. Use a
+leading &lsquo;/&rsquo; to force <b>/*.h</b> to match foo.h
+but not bar/foo.h.</p>
+
+<p style="margin-left:11%; margin-top: 1em">When a glob
+starts with a &lsquo;^&rsquo; or a &lsquo;!&rsquo; as in
+<b>-g</b>^<i>GLOB</i>, the match is negated. Likewise, a
+&lsquo;!&rsquo; (but not a &lsquo;^&rsquo;) may be used with
+globs in the files specified <b>--include-from</b>,
+<b>--exclude-from</b>, and <b>--ignore-files</b> to negate
+the glob match. Empty lines or lines starting with a
+&lsquo;#&rsquo; are ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Glob Syntax
+and Conventions</b></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p style="margin-top: 1em"><b>*</b></p></td>
+<td width="10%"></td>
+<td width="53%">
+
+
+<p style="margin-top: 1em">Matches anything except /.</p></td>
+<td width="25%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>?</b></p></td>
+<td width="10%"></td>
+<td width="53%">
+
+
+<p>Matches any one character except /.</p></td>
+<td width="25%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>[abc-e]</b></p>
+
+<p style="margin-left:22%;">Matches one character
+a,b,c,d,e.</p>
+
+<p style="margin-left:11%;"><b>[^abc-e]</b></p>
+
+<p style="margin-left:22%;">Matches one character not
+a,b,c,d,e,/.</p>
+
+<p style="margin-left:11%;"><b>[!abc-e]</b></p>
+
+<p style="margin-left:22%;">Matches one character not
+a,b,c,d,e,/.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>/</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>When used at the start of a glob, matches if pathname
+has no /. When used at the end of a glob, matches
+directories only.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>**/</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>Matches zero or more directories.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>/**</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>When used at the end of a glob, matches everything after
+the /.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>\?</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>Matches a ? or any other character specified after the
+backslash.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Glob
+Matching Examples</b></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p style="margin-top: 1em"><b>*</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p style="margin-top: 1em">Matches a, b, x/a, x/y/b</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a, x/a, x/y/a, but not b, x/b, a/a/b</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>/*</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a, b, but not x/a, x/b, x/y/a</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>/a</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a, but not x/a, x/y/a</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a?b</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches axb, ayb, but not a, b, ab, a/b</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a[xy]b</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches axb, ayb but not a, b, azb</p></td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>a[a-z]b</b></p>
+
+<p style="margin-left:22%;">Matches aab, abb, acb, azb, but
+not a, b, a3b, aAb, aZb</p>
+
+<p style="margin-left:11%;"><b>a[^xy]b</b></p>
+
+<p style="margin-left:22%;">Matches aab, abb, acb, azb, but
+not a, b, axb, ayb</p>
+
+<p style="margin-left:11%;"><b>a[^a-z]b</b></p>
+
+<p style="margin-left:22%;">Matches a3b, aAb, aZb but not
+a, b, aab, abb, acb, azb</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a/*/b</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a/x/b, a/y/b, but not a/b, a/x/y/b</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>**/a</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a, x/a, x/y/a, but not b, x/b.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a/**/b</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a/b, a/x/b, a/x/y/b, but not x/a/b, a/b/x</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a/**</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a/x, a/y, a/x/y, but not a, b/x</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>a\?b</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Matches a?b, but not a, b, ab, axb, a/b</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">Note that
+exclude glob patterns take priority over include glob
+patterns when specified with options -g, --exclude,
+--exclude-dir, --include and include-dir.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Glob patterns
+specified with prefix &lsquo;!&rsquo; in any of the files
+associated with --include-from, --exclude-from and
+--ignore-files will negate a previous glob match. That is,
+any matching file or directory excluded by a previous glob
+pattern specified in the files associated with
+--exclude-from or --ignore-file will become included again.
+Likewise, any matching file or directory included by a
+previous glob pattern specified in the files associated with
+--include-from will become excluded again.</p>
+
+<h2>ENVIRONMENT
+<a name="ENVIRONMENT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>GREP_PATH</b></p>
+
+<p style="margin-left:22%;">May be used to specify a file
+path to pattern files. The file path is used by option
+<b>-f</b> to open a pattern file, when the pattern file does
+not exist.</p>
+
+<p style="margin-left:11%;"><b>GREP_COLOR</b></p>
+
+<p style="margin-left:22%;">May be used to specify ANSI SGR
+parameters to highlight matches when option <b>--color</b>
+is used, e.g. 1;35;40 shows pattern matches in bold magenta
+text on a black background. Deprecated in favor of
+<b>GREP_COLORS</b>, but still supported.</p>
+
+<p style="margin-left:11%;"><b>GREP_COLORS</b></p>
+
+<p style="margin-left:22%;">May be used to specify ANSI SGR
+parameters to highlight matches and other attributes when
+option <b>--color</b> is used. Its value is a
+colon-separated list of ANSI SGR parameters that defaults to
+<b>cx=33:mt=1;31:fn=1;35:ln=1;32:cn=1;32:bn=1;32:se=36</b>.
+The <b>mt=</b>, <b>ms=</b>, and <b>mc=</b> capabilities of
+<b>GREP_COLORS</b> take priority over <b>GREP_COLOR</b>.
+Option <b>--colors</b> takes priority over
+<b>GREP_COLORS</b>.</p>
+
+<h2>GREP_COLORS
+<a name="GREP_COLORS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Colors are
+specified as string of colon-separated ANSI SGR parameters
+of the form &lsquo;what=substring&rsquo;, where
+&lsquo;substring&rsquo; is a semicolon-separated list of
+ANSI SGR codes or &lsquo;k&rsquo; (black), &lsquo;r&rsquo;
+(red), &lsquo;g&rsquo; (green), &lsquo;y&rsquo; (yellow),
+&lsquo;b&rsquo; (blue), &lsquo;m&rsquo; (magenta),
+&lsquo;c&rsquo; (cyan), &lsquo;w&rsquo; (white). Upper case
+specifies background colors. A &lsquo;+&rsquo; qualifies a
+color as bright. A foreground and a background color may be
+combined with one or more font properties &lsquo;n&rsquo;
+(normal), &lsquo;f&rsquo; (faint), &lsquo;h&rsquo;
+(highlight), &lsquo;i&rsquo; (invert), &lsquo;u&rsquo;
+(underline). Substrings may be specified for:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>sl=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for selected lines.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>cx=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for context lines.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>rv</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>Swaps the <b>sl=</b> and <b>cx=</b> capabilities when
+<b>-v</b> is specified.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>mt=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for matching text in any matching
+line.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>ms=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for matching text in a selected line. The
+substring <b>mt=</b> by default.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>mc=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for matching text in a context line. The
+substring <b>mt=</b> by default.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>fn=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for filenames.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>ln=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for line numbers.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>cn=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for column numbers.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>bn=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for byte offsets.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>se=</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>SGR substring for separators.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>rv</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>a Boolean parameter, switches <b>sl=</b> and <b>cx=</b>
+with option <b>-v</b>.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>hl</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>a Boolean parameter, enables filename hyperlinks
+(<b>\33]8;;link</b>).</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="4%">
+
+
+<p><b>ne</b></p></td>
+<td width="7%"></td>
+<td width="78%">
+
+
+<p>a Boolean parameter, disables &lsquo;&lsquo;erase in
+line&rsquo;&rsquo; <b>\33[K</b>.</p></td></tr>
+</table>
+
+<h2>FORMAT
+<a name="FORMAT"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Option
+<b>--format</b>=<i>FORMAT</i> specifies an output format for
+file matches. Fields may be used in <i>FORMAT</i>, which
+expand into the following values: <b><br>
+%[</b><i>ARG</i><b>]F</b></p>
+
+<p style="margin-left:22%;">if option <b>-H</b> is used:
+<i>ARG</i>, the file pathname and separator.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%f</b></p></td>
+<td width="8%"></td>
+<td width="67%">
+
+
+<p>the file pathname.</p></td>
+<td width="11%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%a</b></p></td>
+<td width="8%"></td>
+<td width="67%">
+
+
+<p>the file basename without directory path.</p></td>
+<td width="11%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%p</b></p></td>
+<td width="8%"></td>
+<td width="67%">
+
+
+<p>the directory path to the file.</p></td>
+<td width="11%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%z</b></p></td>
+<td width="8%"></td>
+<td width="67%">
+
+
+<p>the file pathname in a (compressed) archive.</p></td>
+<td width="11%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]H</b></p>
+
+<p style="margin-left:22%;">if option <b>-H</b> is used:
+<i>ARG</i>, the quoted pathname and separator, \&quot; and
+\\ replace &quot; and \.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%h</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the quoted file pathname, \&quot; and \\ replace &quot;
+and \.</p></td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]N</b></p>
+
+<p style="margin-left:22%;">if option <b>-n</b> is used:
+<i>ARG</i>, the line number and separator.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%n</b></p></td>
+<td width="8%"></td>
+<td width="44%">
+
+
+<p>the line number of the match.</p></td>
+<td width="34%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]K</b></p>
+
+<p style="margin-left:22%;">if option <b>-k</b> is used:
+<i>ARG</i>, the column number and separator.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%k</b></p></td>
+<td width="8%"></td>
+<td width="47%">
+
+
+<p>the column number of the match.</p></td>
+<td width="31%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]B</b></p>
+
+<p style="margin-left:22%;">if option <b>-b</b> is used:
+<i>ARG</i>, the byte offset and separator.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%b</b></p></td>
+<td width="8%"></td>
+<td width="44%">
+
+
+<p>the byte offset of the match.</p></td>
+<td width="34%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]T</b></p>
+
+<p style="margin-left:22%;">if option <b>-T</b> is used:
+<i>ARG</i> and a tab character.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%t</b></p></td>
+<td width="8%"></td>
+<td width="24%">
+
+
+<p>a tab character.</p></td>
+<td width="54%">
+</td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>SEP</i><b>]$</b></p>
+
+<p style="margin-left:22%;">set field separator to
+<i>SEP</i> for the rest of the format fields.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]&lt;</b></p>
+
+<p style="margin-left:22%;">if the first match:
+<i>ARG</i>.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]&gt;</b></p>
+
+<p style="margin-left:22%;">if not the first match:
+<i>ARG</i>.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%,</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>if not the first match: a comma, same as
+<b>%[,]&gt;</b>.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%:</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>if not the first match: a colon, same as
+<b>%[:]&gt;</b>.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%;</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>if not the first match: a semicolon, same as
+<b>%[;]&gt;</b>.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%|</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>if not the first match: a vertical bar, same as
+<b>%[|]&gt;</b>.</p> </td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>ARG</i><b>]S</b></p>
+
+<p style="margin-left:22%;">if not the first match:
+<i>ARG</i> and separator, see also
+<b>%[</b><i>SEP</i><b>]$.</b></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%s</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the separator, see also <b>%[</b><i>ARG</i><b>]S</b> and
+<b>%[</b><i>SEP</i><b>]$.</b></p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%~</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>a newline character.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%m</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the number of matches or matched files.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%O</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line is output as a raw string of
+bytes.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%o</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match is output as a raw string of bytes.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%Q</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line as a quoted string, \&quot; and \\
+replace &quot; and \.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%q</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match as a quoted string, \&quot; and \\ replace
+&quot; and \.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%C</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line formatted as a quoted C/C++
+string.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%c</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match formatted as a quoted C/C++ string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%J</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line formatted as a quoted JSON string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%j</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match formatted as a quoted JSON string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%V</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line formatted as a quoted CSV string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%v</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match formatted as a quoted CSV string.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%X</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the matching line formatted as XML character data.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%x</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the match formatted as XML character data.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%w</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the width of the match, counting wide characters.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%d</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the size of the match, counting bytes.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%e</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the ending byte offset of the match.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%Z</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the edit distance cost of an approximate match with
+option <b>-Z</b></p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%u</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>select unique lines only, unless option <b>-u</b> is
+used.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%1</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the first regex group capture of the match, and so on up
+to group <b>%9</b>, same as <b>%[1]#</b>; requires option
+<b>-P</b>.</p> </td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NUM</i><b>]#</b></p>
+
+<p style="margin-left:22%;">the regex group capture
+<i>NUM</i>; requires option <b>-P</b>.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NUM</i><b>]b</b></p>
+
+<p style="margin-left:22%;">the byte offset of the group
+capture <i>NUM</i>; requires option <b>-P</b>. Use <b>e</b>
+for the ending byte offset and <b>d</b> for the byte
+length.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NUM1</i><b>|</b><i>NUM2</i><b>|</b>...<b>]#</b></p>
+
+<p style="margin-left:22%;">the first group capture
+<i>NUM</i> that matched; requires option <b>-P</b>.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NUM1</i><b>|</b><i>NUM2</i><b>|</b>...<b>]b</b></p>
+
+<p style="margin-left:22%;">the byte offset of the first
+group capture <i>NUM</i> that matched; requires option
+<b>-P</b>. Use <b>e</b> for the ending byte offset and
+<b>d</b> for the byte length.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NAME</i><b>]#</b></p>
+
+<p style="margin-left:22%;">the <i>NAME</i>d group capture;
+requires option <b>-P</b> and capturing pattern
+&lsquo;(?&lt;NAME&gt;PATTERN)&rsquo;, see also
+<b>%G</b>.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NAME</i><b>]b</b></p>
+
+<p style="margin-left:22%;">the byte offset of the
+<i>NAME</i>d group capture; requires option <b>-P</b> and
+capturing pattern &lsquo;(?&lt;NAME&gt;PATTERN)&rsquo;. Use
+<b>e</b> for the ending byte offset and <b>d</b> for the
+byte length.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NAME1</i><b>|</b><i>NAME2|...</i><b>]#</b></p>
+
+<p style="margin-left:22%;">the first <i>NAME</i>d group
+capture that matched; requires option <b>-P</b> and
+capturing pattern &lsquo;(?&lt;NAME&gt;PATTERN)&rsquo;, see
+also <b>%G</b>.</p>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>NAME1</i><b>|</b><i>NAME2|...</i><b>]b</b></p>
+
+<p style="margin-left:22%;">the byte offset of the first
+<i>NAME</i>d group capture that matched; requires option
+<b>-P</b> and capturing pattern
+&lsquo;(?&lt;NAME&gt;PATTERN)&rsquo;. Use <b>e</b> for the
+ending byte offset and <b>d</b> for the byte length.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%G</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>list of group capture indices/names that matched;
+requires option <b>-P</b>.</p></td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>TEXT1</i><b>|</b><i>TEXT2</i><b>|...]G</b></p>
+
+<p style="margin-left:22%;">list of <i>TEXT</i> indexed by
+group capture indices that matched; requires option
+<b>-P</b>.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%g</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>the group capture index/name matched or 1; requires
+option <b>-P</b>.</p></td></tr>
+</table>
+
+
+<p style="margin-left:11%;"><b>%[</b><i>TEXT1</i><b>|</b><i>TEXT2</i><b>|</b>...<b>]g</b></p>
+
+<p style="margin-left:22%;">the first <i>TEXT</i> indexed
+by the first group capture index that matched; requires
+option <b>-P</b>.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>%%</b></p></td>
+<td width="8%"></td>
+<td width="30%">
+
+
+<p>the percentage sign.</p></td>
+<td width="48%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">Formatted
+output is written without a terminating newline, unless
+<b>%~</b> or &lsquo;\n&rsquo; is explicitly specified in the
+format string.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<b>[</b><i>ARG</i><b>]</b> part of a field is optional and
+may be omitted. When present, the argument must be placed in
+<b>[]</b> brackets, for example <b>%[,]F</b> to output a
+comma, the pathname, and a separator.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>%[</b><i>SEP</i><b>]$</b>
+and <b>%u</b> are switches and do not send anything to the
+output.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The separator
+used by the <b>%F</b>, <b>%H</b>, <b>%N</b>, <b>%K</b>,
+<b>%B</b>, <b>%S</b> and <b>%G</b> fields may be changed by
+preceding the field by <b>%[</b><i>SEP</i><b>]$</b>. When
+<b>[</b><i>SEP</i><b>]</b> is not provided, this reverts the
+separator to the default separator or the separator
+specified with <b>--separator</b>.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Formatted
+output is written for each matching pattern, which means
+that a line may be output multiple times when patterns match
+more than once on the same line. If field <b>%u</b> is
+specified anywhere in a format string, matching lines are
+output only once, unless option <b>-u</b>, <b>--ungroup</b>
+is specified or when more than one line of input matched the
+search pattern.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Additional
+formatting options: <b><br>
+--format-begin</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">the <i>FORMAT</i> when
+beginning the search.</p>
+
+
+<p style="margin-left:11%;"><b>--format-open</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">the <i>FORMAT</i> when opening
+a file and a match was found.</p>
+
+
+<p style="margin-left:11%;"><b>--format-close</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">the <i>FORMAT</i> when closing
+a file and a match was found.</p>
+
+
+<p style="margin-left:11%;"><b>--format-end</b>=<i>FORMAT</i></p>
+
+<p style="margin-left:22%;">the <i>FORMAT</i> when ending
+the search.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The context
+options <b>-A</b>, <b>-B</b>, <b>-C</b>, <b>-y</b>, and
+display options <b>--break</b>, <b>--heading</b>,
+<b>--color</b>, <b>-T</b>, and <b>--null</b> have no effect
+on formatted output.</p>
+
+<h2>EXAMPLES
+<a name="EXAMPLES"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Display lines
+containing the word &lsquo;patricia&rsquo; in
+&lsquo;myfile.txt&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -w
+patricia myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display lines
+containing the word &lsquo;patricia&rsquo;, ignoring
+case:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -wi
+patricia myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display lines
+approximately matching the word &lsquo;patricia&rsquo;,
+ignoring case and allowing up to 2 spelling errors using
+fuzzy search:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -Z2 -wi
+patricia myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Count the
+number of lines containing &lsquo;patricia&rsquo;, ignoring
+case:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -cwi
+patricia myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Count the
+number of words &lsquo;patricia&rsquo;, ignoring case:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -cowi
+patricia myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">List lines with
+both &lsquo;amount&rsquo; and a decimal number, ignoring
+case:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -wi
+--bool &rsquo;amount +(.+)?&rsquo; myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Alternative
+query:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -wi -e
+amount --and &rsquo;+(.+)?&rsquo; myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">List all
+Unicode words in a file:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -o
+&rsquo;\w+&rsquo; myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">List all ASCII
+words in a file:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -o
+&rsquo;[[:word:]]+&rsquo; myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">List the
+laughing face emojis (Unicode code points U+1F600 to
+U+1F60F):</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -o
+&rsquo;[\x{1F600}-\x{1F60F}]&rsquo; myfile.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Check if a file
+contains any non-ASCII (i.e. Unicode) characters:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -q
+&rsquo;[^[:ascii:]]&rsquo; myfile.txt &amp;&amp; echo
+&quot;contains Unicode&quot;</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display the
+line and column number of &lsquo;FIXME&rsquo; in C++ files
+using recursive search, with one line of context before and
+after a matched line:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -C1 -R
+-n -k -tc++ FIXME</p>
+
+<p style="margin-left:11%; margin-top: 1em">List the C/C++
+comments in a file with line numbers:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n -e
+&rsquo;//.*&rsquo; -e
+&rsquo;/\*([^*]|(\*+[^*/]))*\*+\/&rsquo; myfile.cpp</p>
+
+<p style="margin-left:11%; margin-top: 1em">The same, but
+using predefined pattern c++/comments:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n -f
+c++/comments myfile.cpp</p>
+
+<p style="margin-left:11%; margin-top: 1em">List the lines
+that need fixing in a C/C++ source file by looking for the
+word &lsquo;FIXME&rsquo; while skipping any
+&lsquo;FIXME&rsquo; in quoted strings:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -e
+FIXME -N
+&rsquo;&quot;(\\.|\\\r?\n|[^\\\n&quot;])*&quot;&rsquo;
+myfile.cpp</p>
+
+<p style="margin-left:11%; margin-top: 1em">The same, but
+using predefined pattern cpp/zap_strings:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -e
+FIXME -f cpp/zap_strings myfile.cpp</p>
+
+<p style="margin-left:11%; margin-top: 1em">Find lines with
+&lsquo;FIXME&rsquo; or &lsquo;TODO&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n -e
+FIXME -e TODO myfile.cpp</p>
+
+<p style="margin-left:11%; margin-top: 1em">Find lines with
+&lsquo;FIXME&rsquo; that also contain the word
+&lsquo;urgent&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n
+FIXME myfile.cpp | ugrep -w urgent</p>
+
+<p style="margin-left:11%; margin-top: 1em">Find lines with
+&lsquo;FIXME&rsquo; but not the word
+&lsquo;later&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n
+FIXME myfile.cpp | ugrep -v -w later</p>
+
+<p style="margin-left:11%; margin-top: 1em">Output a list
+of line numbers of lines with &lsquo;FIXME&rsquo; but not
+&lsquo;later&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n
+FIXME myfile.cpp | ugrep -vw later | <br>
+ugrep -P &rsquo;^(\d+)&rsquo;
+--format=&rsquo;%,%n&rsquo;</p>
+
+<p style="margin-left:11%; margin-top: 1em">Find lines with
+&lsquo;FIXME&rsquo; in the C/C++ files stored in a
+tarball:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -z
+-tc++ -n FIXME project.tgz</p>
+
+<p style="margin-left:11%; margin-top: 1em">Recursively
+find lines with &lsquo;FIXME&rsquo; in C/C++ files, but do
+not search any &lsquo;bak&rsquo; and &lsquo;old&rsquo;
+directories:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -n
+FIXME -tc++ -g^bak/,^old/</p>
+
+<p style="margin-left:11%; margin-top: 1em">Recursively
+search for the word &lsquo;copyright&rsquo; in
+cpio/jar/pax/tar/zip archives, compressed and regular files,
+and in PDFs using a PDF filter:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -z -w
+--filter=&rsquo;pdf:pdftotext % -&rsquo; copyright</p>
+
+<p style="margin-left:11%; margin-top: 1em">Match the
+binary pattern &lsquo;A3hhhhA3&rsquo; (hex) in a binary file
+without Unicode pattern matching <b>-U</b> (which would
+otherwise match &lsquo;\xaf&rsquo; as a Unicode character
+U+00A3 with UTF-8 byte sequence C2 A3) and display the
+results in hex with <b>--hexdump</b> with <b>C1</b> to
+output one hex line before and after each match:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -U
+--hexdump=C1 &rsquo;\xa3[\x00-\xff]{2}\xa3&rsquo; a.out</p>
+
+<p style="margin-left:11%; margin-top: 1em">Hexdump an
+entire file using a pager for viewing:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -X
+--pager &rsquo;&rsquo; a.out</p>
+
+<p style="margin-left:11%; margin-top: 1em">List all files
+that are not ignored by one or more
+&lsquo;.gitignore&rsquo;:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -l
+&rsquo;&rsquo; --ignore-files</p>
+
+<p style="margin-left:11%; margin-top: 1em">List all files
+containing a RPM signature, located in the &lsquo;rpm&rsquo;
+directory and recursively below up to two levels deeper (3
+levels total):</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -3 -l
+-tRpm &rsquo;&rsquo; rpm/</p>
+
+<p style="margin-left:11%; margin-top: 1em">Monitor the
+system log for bug reports and ungroup multiple matches on a
+line:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ tail -f
+/var/log/system.log | ugrep -u -i -w bug</p>
+
+<p style="margin-left:11%; margin-top: 1em">Interactive
+fuzzy search with Boolean search queries:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep -Q
+--bool -Z3 --sort=best</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display all
+words in a MacRoman-encoded file that has CR newlines:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep
+--encoding=MACROMAN &rsquo;\w+&rsquo; mac.txt</p>
+
+<p style="margin-left:11%; margin-top: 1em">Display all
+options related to &quot;fuzzy&quot; searching:</p>
+
+<p style="margin-left:22%; margin-top: 1em">$ ugrep --help
+fuzzy</p>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Report bugs
+at:</p>
+
+
+<p style="margin-left:22%; margin-top: 1em">https://github.com/Genivia/ugrep/issues</p>
+
+<h2>LICENSE
+<a name="LICENSE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>ugrep</b> is
+released under the BSD&minus;3 license. All parts of the
+software have reasonable copyright terms permitting free
+redistribution. This includes the ability to reuse all or
+parts of the ugrep source tree.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+ 
+<p style="margin-left:11%; margin-top: 1em">grep(1).</p>
+<hr>
+</body>
+</html>

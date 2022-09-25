@@ -2,11 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const fileList = [
+".bashrc",
 ".gitconfig",
 ".gitignore",
 ".profile",
 ".zimrc",
-".zprofile",
+".zsh_profile",
 ".zshrc"
 ];
 
@@ -17,7 +18,7 @@ try {
 fs.unlinkSync(p)
   //file removed
 } catch(err) {
-	throw new Error(err)
+	//throw new Error(err)
   console.error(err)
 }
 })

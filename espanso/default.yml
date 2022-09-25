@@ -1,0 +1,23 @@
+matches:
+- replace: crashxx@gmail.com11
+  trigger: ;email
+- replace: marko@deep-impact.ch
+  trigger: ;wmail
+- replace: marko@deep-impact.ch
+  trigger: ;rmail
+- replace: Hi there!
+  trigger: :espanso
+- replace: '{{mydate}}'
+  trigger: :date
+  vars:
+  - name: mydate
+    params:
+      format: '%m/%d/%Y'
+    type: date
+- replace: '{{output}}'
+  trigger: :shell
+  vars:
+  - name: output
+    params:
+      cmd: echo Hello from your shell env
+    type: shell

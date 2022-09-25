@@ -7,9 +7,6 @@
 # Zsh configuration
 # -----------------
 
-# when globing has non matching pattern, this will allow it to run the rest
-# default behavrious is it will exit with error without showing what it found
-setopt NO_NOMATCH
 #
 # History
 #
@@ -96,7 +93,7 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 # Initialize modules
 # ------------------
 
-ZIM_HOME=${ZDOTDIR:-${HOME}}/$DOTFILES/zsh.zim
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
 # Download zimfw plugin manager if missing.
 if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
   if (( ${+commands[curl]} )); then
@@ -126,55 +123,11 @@ zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
 for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
 for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
-
 for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
-
 # }}} End configuration added by Zim install
 
+source ~/dotfiles/zsh/my_zshrc
 
-# Super cool keyboard stuffs. 
-# Required for x applications
-#setxkbmap -option caps:ctrl_modifier
-
-# Emacs style
-zle -N edit-command-line
-# The same in vim (open command history to edit)
-# Opens current command in temproarly vim buffer
-# TODO: try to figure out how to do CTRL-c to back to readline
-bindkey '^f' edit-command-line
-# It used to be like that Ctrl-x-e to edit command line
-# autoload -U edit-command-line
- 
-# there is vimrc that dose the same in vim
-bindkey '^H' backward-kill-word
-bindkey -M viins '^H' backward-kill-word
-
-source ~/dotfiles/zsh/private/aliases.zsh
-source ~/dotfiles/zsh/private/functions.zsh
-
-# Move this to the session
-did=$(xinput list|grep 'Logitech G903 LS.*pointer'|grep -o 'id=[0-9][0-9]'|cut -d= -f2) && /usr/bin/xinput set-button-map $did 3 2 1 
-
-if command -v fnm &> /dev/null
-then
-    echo "<the_command> found"
-    eval `fnm env`
-fi
-
-# https://github.com/zsh-users/zsh-autosuggestions/issues/229
-# if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
-
-PATH=$PATH:$HOME/.bun/bin/
-
-# https://minsw.github.io/fzf-color-picker/
-export FZF_DEFAULT_OPTS='--color=bg+:#073644,bg:#002b36,spinner:#719e07,hl:#586e75
-  --color=fg:#839496,header:#586e75,info:#cb4b16,pointer:#719e07
-  --color=marker:#719e07,fg+:#839496,prompt:#719e07,hl+:#719e07'
-
-export FZF_COMPLETION_TRIGGER="**"
-export FZF_DEFAULT_COMMAND='fd --hidden --exclude .git --color never --strip-cwd-prefix'
-export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND} --type f"
-export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND} --type d"
 
